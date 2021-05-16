@@ -12,6 +12,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.source.encoding>UTF-8</project.build.source.encoding>
     </properties>
 
     <dependencies>
@@ -24,7 +25,6 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.4.200</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
