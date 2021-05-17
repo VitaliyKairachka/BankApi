@@ -1,16 +1,15 @@
 package com.kairachka.bankapi.service;
 
 import com.kairachka.bankapi.entity.User;
-import com.kairachka.bankapi.repository.UserRepository;
+import com.kairachka.bankapi.enums.Role;
+import com.sun.net.httpserver.HttpExchange;
 
-public class UserService {
-    private  UserRepository userRepository;
+public interface UserService {
+    boolean addUser(HttpExchange exchange);
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    long getUserIdByLogin(String login);
 
-    public void createUser(User user) {
-        userRepository.addUser(user);
-    }
+    boolean authentication(String login, String password);
+
+    Role getRoleByLogin(String login);
 }

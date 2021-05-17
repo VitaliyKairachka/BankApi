@@ -1,22 +1,16 @@
 package com.kairachka.bankapi.entity;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Bill {
     long id;
-    long balance;
+    long billNumber;
+    double balance;
     long userId;
 
-    public Bill() {
-    }
-
-    public Bill(long id, long balance, long userId) {
-        this.id = id;
-        this.balance = balance;
-        this.userId = userId;
-    }
-
-    public Bill(long balance, long userId) {
+    public Bill(long billNumber, double balance, long userId) {
+        this.billNumber = billNumber;
         this.balance = balance;
         this.userId = userId;
     }
@@ -29,11 +23,19 @@ public class Bill {
         this.id = id;
     }
 
-    public long getBalance() {
+    public long getBillNumber() {
+        return billNumber;
+    }
+
+    public void setBillNumber(long billNumber) {
+        this.billNumber = billNumber;
+    }
+
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(long balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -50,19 +52,11 @@ public class Bill {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bill bill = (Bill) o;
-        return id == bill.id && balance == bill.balance && userId == bill.userId;
+        return id == bill.id && billNumber == bill.billNumber && Double.compare(bill.balance, balance) == 0 && userId == bill.userId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, balance, userId);
-    }
-
-    @Override
-    public String toString() {
-        return "Bill{" +
-                "balance=" + balance +
-                ", userId=" + userId +
-                '}';
+        return Objects.hash(id, billNumber, balance, userId);
     }
 }

@@ -5,17 +5,11 @@ import java.util.Objects;
 public class Card {
     long id;
     long billId;
+    long number;
 
-    public Card() {
-    }
-
-    public Card(long billId) {
+    public Card(long billId, long number) {
         this.billId = billId;
-    }
-
-    public Card(long id, long billId) {
-        this.id = id;
-        this.billId = billId;
+        this.number = number;
     }
 
     public long getId() {
@@ -34,23 +28,24 @@ public class Card {
         this.billId = billId;
     }
 
+    public long getNumber() {
+        return number;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return id == card.id && billId == card.billId;
+        return id == card.id && billId == card.billId && number == card.number;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, billId);
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "billId=" + billId +
-                '}';
+        return Objects.hash(id, billId, number);
     }
 }

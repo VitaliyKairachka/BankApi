@@ -6,25 +6,16 @@ public class Operation {
     long id;
     long sourceId;
     long targetId;
-    long sum;
+    double sum;
     long userId;
+    String status;
 
-    public Operation() {
-    }
-
-    public Operation(long sourceId, long targetId, long sum, long userId) {
+    public Operation(long sourceId, long targetId, double sum, long userId, String status) {
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.sum = sum;
         this.userId = userId;
-    }
-
-    public Operation(long id, long sourceId, long targetId, long sum, long userId) {
-        this.id = id;
-        this.sourceId = sourceId;
-        this.targetId = targetId;
-        this.sum = sum;
-        this.userId = userId;
+        this.status = status;
     }
 
     public long getId() {
@@ -51,11 +42,11 @@ public class Operation {
         this.targetId = targetId;
     }
 
-    public long getSum() {
+    public double getSum() {
         return sum;
     }
 
-    public void setSum(long sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 
@@ -67,26 +58,24 @@ public class Operation {
         this.userId = userId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Operation operation = (Operation) o;
-        return id == operation.id && sourceId == operation.sourceId && targetId == operation.targetId && sum == operation.sum && userId == operation.userId;
+        return id == operation.id && sourceId == operation.sourceId && targetId == operation.targetId && Double.compare(operation.sum, sum) == 0 && userId == operation.userId && Objects.equals(status, operation.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sourceId, targetId, sum, userId);
-    }
-
-    @Override
-    public String toString() {
-        return "Operation{" +
-                "sourceId=" + sourceId +
-                ", targetId=" + targetId +
-                ", sum=" + sum +
-                ", userId=" + userId +
-                '}';
+        return Objects.hash(id, sourceId, targetId, sum, userId, status);
     }
 }

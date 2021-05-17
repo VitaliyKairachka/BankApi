@@ -1,0 +1,65 @@
+CREATE TABLE Bill
+(
+    id          BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    bill_number BIGINT NOT NULL AUTO_INCREMENT (1000000000000000000, 1),
+    balance     DECIMAL DEFAULT 0,
+    user_id     BIGINT NOT NULL,
+    CHECK (bill_number < 2000000000000000000)
+);
+
+CREATE TABLE User
+(
+    id       BIGINT                    NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    login    VARCHAR(255)              NOT NULL UNIQUE,
+    password VARCHAR(255)              NOT NULL,
+    role     VARCHAR(255) NOT NULL DEFAULT 'USER'
+);
+
+CREATE TABLE Card
+(
+    id          BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    card_number BIGINT       NOT NULL AUTO_INCREMENT (125155000000000, 1),
+    bill_id     BIGINT       NOT NULL,
+    status      VARCHAR(255) NOT NULL DEFAULT 'NOT_ACTIVE'
+);
+
+CREATE TABLE Replenishment
+(
+    id      BIGINT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    sum     DECIMAL NOT NULL,
+    bill_id BIGINT  NOT NULL,
+    CHECK (sum > 0.01)
+);
+
+CREATE TABLE Partner
+(
+    id           BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name         VARCHAR(255),
+    partner_bill BIGINT UNIQUE,
+    CHECK (partner_bill >= 2000000000000000000)
+);
+
+CREATE TABLE Operation
+(
+    id      BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    source  BIGINT       NOT NULL,
+    target  BIGINT       NOT NULL,
+    sum     DECIMAL      NOT NULL,
+    user_id BIGINT       NOT NULL,
+    status  VARCHAR(255) NOT NULL DEFAULT 'UNAPPROVED',
+    CHECK (sum > 0.01)
+);
+
+
+ALTER TABLE Bill
+    ADD FOREIGN KEY (user_id) REFERENCES User (id);
+ALTER TABLE Card
+    ADD FOREIGN KEY (bill_id) REFERENCES Bill (id);
+ALTER TABLE Replenishment
+    ADD FOREIGN KEY (bill_id) REFERENCES Bill (id);
+ALTER TABLE Operation
+    ADD FOREIGN KEY (source) REFERENCES Bill (id);
+ALTER TABLE Operation
+    ADD FOREIGN KEY (target) REFERENCES Partner (id);
+ALTER TABLE Operation
+    ADD FOREIGN KEY (user_id) REFERENCES User (id);

@@ -7,15 +7,16 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 
-public class UserController implements HttpHandler {
+public class BillController implements HttpHandler {
     UserServiceImpl userService = new UserServiceImpl();
 
+
     @Override
-    public void handle(HttpExchange exchange) {
-        if ("POST".equals(exchange.getRequestMethod())) {
+    public void handle(HttpExchange exchange) throws IOException {
+        if ("GET".equals(exchange.getRequestMethod())) {
             try {
-                if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
-                    userService.addUser(exchange);
+                if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
+
                     exchange.sendResponseHeaders(201, "Created".length());
                     exchange.close();
                 } else {
