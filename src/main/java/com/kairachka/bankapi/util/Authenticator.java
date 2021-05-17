@@ -1,10 +1,10 @@
 package com.kairachka.bankapi.util;
 
-import com.kairachka.bankapi.service.implement.UserServiceImpl;
+import com.kairachka.bankapi.service.UserService;
 import com.sun.net.httpserver.BasicAuthenticator;
 
 public class Authenticator extends BasicAuthenticator {
-    UserServiceImpl userService = new UserServiceImpl();
+    UserService userService = new UserService();
 
     public Authenticator(String realm) {
         super(realm);

@@ -1,14 +1,14 @@
 package com.kairachka.bankapi.controller;
 
 import com.kairachka.bankapi.enums.Role;
-import com.kairachka.bankapi.service.implement.UserServiceImpl;
+import com.kairachka.bankapi.service.UserService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 
 public class UserController implements HttpHandler {
-    UserServiceImpl userService = new UserServiceImpl();
+    UserService userService = new UserService();
 
     @Override
     public void handle(HttpExchange exchange) {

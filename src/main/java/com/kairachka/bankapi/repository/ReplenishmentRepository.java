@@ -4,8 +4,12 @@ import com.kairachka.bankapi.entity.Replenishment;
 
 import java.util.List;
 
-public interface ReplenishmentRepository {
-    boolean addReplenishment(long billId);
+public class ReplenishmentRepository{
+    public boolean addReplenishment(long billId) {
+        return false;
+    }
 
-    List<Replenishment> getAllReplenishmentByUser(long billId);
+    public List<Replenishment> getAllReplenishmentByUser(long billId) {
+        return null;
+    }
 }

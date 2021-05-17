@@ -2,14 +2,36 @@ package com.kairachka.bankapi.service;
 
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
+import com.kairachka.bankapi.exception.UserNotFoundException;
+import com.kairachka.bankapi.mapper.UserMapper;
+import com.kairachka.bankapi.repository.UserRepository;
 import com.sun.net.httpserver.HttpExchange;
 
-public interface UserService {
-    boolean addUser(HttpExchange exchange);
+import java.util.Optional;
 
-    long getUserIdByLogin(String login);
+public class UserService {
+    UserRepository userRepository = new UserRepository();
+    UserMapper userMapper = new UserMapper();
 
-    boolean authentication(String login, String password);
+    public boolean addUser(HttpExchange exchange) {
+        return userRepository.addUser(userMapper.JsonToUser(exchange));
+    }
 
-    Role getRoleByLogin(String login);
+    public long getUserIdByLogin(String login) {
+        Optional<User> user = userRepository.getUser(login);
+        return user.map(User::getId).orElse(0L);
+    }
+
+    public boolean authentication(String login, String password) {
+        Optional<User> user = userRepository.getUser(login);
+        return user.map(value -> value.getPassword().equals(password)).orElse(false);
+    }
+
+    public Role getRoleByLogin(String login) {
+        Optional<User> user = userRepository.getUser(login);
+        if (user.isPresent()) return user.get().getRole();
+        else throw new UserNotFoundException();
+    }
+
+
 }

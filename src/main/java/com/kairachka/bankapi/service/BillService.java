@@ -1,4 +1,4 @@
 package com.kairachka.bankapi.service;
 
-public interface BillService {
+public class BillService {
 }

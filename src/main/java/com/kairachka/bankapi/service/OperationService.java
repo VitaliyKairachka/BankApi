@@ -1,4 +1,4 @@
 package com.kairachka.bankapi.service;
 
-public interface OperationService {
+public class OperationService {
 }

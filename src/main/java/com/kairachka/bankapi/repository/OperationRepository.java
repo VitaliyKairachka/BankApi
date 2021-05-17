@@ -1,4 +1,4 @@
 package com.kairachka.bankapi.repository;
 
-public interface OperationRepository {
+public class OperationRepository {
 }
