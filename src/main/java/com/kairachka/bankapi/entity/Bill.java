@@ -9,7 +9,11 @@ public class Bill {
     double balance;
     long userId;
 
-    public Bill(long billNumber, double balance, long userId) {
+    public Bill() {
+    }
+
+    public Bill(long id, long billNumber, double balance, long userId) {
+        this.id = id;
         this.billNumber = billNumber;
         this.balance = balance;
         this.userId = userId;
@@ -45,18 +49,5 @@ public class Bill {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bill bill = (Bill) o;
-        return id == bill.id && billNumber == bill.billNumber && Double.compare(bill.balance, balance) == 0 && userId == bill.userId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, billNumber, balance, userId);
     }
 }

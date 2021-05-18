@@ -1,4 +1,4 @@
-connection.url=jdbc:h2:file:C:/Users/Vitaliy/IdeaProjects/BankApi/src/main/resources/db
+connection.url=jdbc:h2:file:/Users/a19189097/IdeaProjects/BankApi/src/main/resources/db
 
 server.port=8080
 

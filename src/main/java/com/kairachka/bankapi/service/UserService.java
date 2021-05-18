@@ -13,11 +13,10 @@ import java.util.Optional;
 public class UserService {
     UserRepository userRepository = new UserRepository();
     UserMapper userMapper = new UserMapper();
-    PasswordEncryption passwordEncryption = new PasswordEncryption();
 
     public boolean addUser(HttpExchange exchange) {
         User user = userMapper.JsonToUser(exchange);
-        user.setPassword(passwordEncryption.hashedPassword(user.getPassword()));
+        user.setPassword(PasswordEncryption.hashedPassword(user.getPassword()));
         return userRepository.addUser(user);
     }
 
@@ -28,13 +27,23 @@ public class UserService {
 
     public boolean authentication(String login, String password) {
         Optional<User> user = userRepository.getUser(login);
-        return user.filter(value -> passwordEncryption.checkPassword(password, value.getPassword())).isPresent();
+//        return user.filter(value -> PasswordEncryption.checkPassword(password, value.getPassword())).isPresent();
+        if (user.isPresent()) {
+            System.out.println("true");
+            System.out.println(user.get().getPassword());
+            System.out.println(password);
+            System.out.println(PasswordEncryption.checkPassword(password, user.get().getPassword()));
+            return PasswordEncryption.checkPassword(password, user.get().getPassword());
+        } else return false;
 //        return user.map(value -> value.getPassword().equals(password)).orElse(false);
     }
 
     public Role getRoleByLogin(String login) {
         Optional<User> user = userRepository.getUser(login);
-        if (user.isPresent()) return user.get().getRole();
-        else throw new UserNotFoundException();
+        if (user.isPresent()) {
+            return user.get().getRole();
+        } else {
+            throw new UserNotFoundException("User not found exception");
+        }
     }
 }

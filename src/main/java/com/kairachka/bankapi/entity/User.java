@@ -2,32 +2,42 @@ package com.kairachka.bankapi.entity;
 
 import com.kairachka.bankapi.enums.Role;
 
-import java.util.Objects;
-
 public class User {
     long id;
     String login;
     String password;
+    String firstName;
+    String lastName;
+    String middleName;
+    String passport;
+    String mobilePhone;
     Role role;
 
     public User() {
     }
 
-    public User(String login, String password) {
+    public User(String login, String password, String firstName, String lastName,
+                String middleName, String passport, String mobilePhone, Role role) {
         this.login = login;
         this.password = password;
-    }
-
-    public User(String login, String password, Role role) {
-        this.login = login;
-        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.passport = passport;
+        this.mobilePhone = mobilePhone;
         this.role = role;
     }
 
-    public User(long id, String login, String password, Role role) {
+    public User(long id, String login, String password, String firstName, String lastName,
+                String middleName, String passport, String mobilePhone, Role role) {
         this.id = id;
         this.login = login;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.passport = passport;
+        this.mobilePhone = mobilePhone;
         this.role = role;
     }
 
@@ -53,6 +63,46 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 
     public Role getRole() {

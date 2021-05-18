@@ -15,11 +15,14 @@ public class UserController implements HttpHandler {
         if ("POST".equals(exchange.getRequestMethod())) {
             try {
                 if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
-                    userService.addUser(exchange);
-                    exchange.sendResponseHeaders(201, "Created".length());
-                    exchange.close();
+                   if (userService.addUser(exchange)) {
+                       exchange.sendResponseHeaders(201, -1);
+                       exchange.close();
+                   } else {
+                       exchange.sendResponseHeaders(406, -1);
+                   }
                 } else {
-                    exchange.sendResponseHeaders(403, 0);
+                    exchange.sendResponseHeaders(403, -1);
                 }
 
 //                exchange.sendResponseHeaders(200);
@@ -33,7 +36,7 @@ public class UserController implements HttpHandler {
             }
         } else {
             try {
-                exchange.sendResponseHeaders(405, -1);// 405 Method Not Allowed
+                exchange.sendResponseHeaders(405, -1);
             } catch (IOException e) {
                 e.printStackTrace();
             }

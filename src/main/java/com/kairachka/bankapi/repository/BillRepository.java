@@ -2,9 +2,12 @@ package com.kairachka.bankapi.repository;
 
 import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.util.PropertiesManager;
+import com.kairachka.bankapi.util.QuerySQL;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BillRepository {
     PropertiesManager propertiesManager = new PropertiesManager();
@@ -13,8 +16,7 @@ public class BillRepository {
 
     public boolean addBill(long userId) {
         try (Connection connection = DriverManager.getConnection(url);
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO BILL(USER_ID) VALUES (?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_BILL)) {
             preparedStatement.setLong(1, userId);
             preparedStatement.execute();
             return true;
@@ -24,17 +26,45 @@ public class BillRepository {
         }
     }
 
-    public List<Bill> getAllBillsByUser(long userId) {
+    public Optional<Bill> getBillById(long billId) {
         try (Connection connection = DriverManager.getConnection(url);
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT * FROM BILL WHERE ID = ?")) {
-            preparedStatement.setLong(1, userId);
+             PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_BILL_BY_ID)) {
+            preparedStatement.setLong(1, billId);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
+            Bill bill = new Bill(
+                    resultSet.getLong(1),
+                    resultSet.getLong(2),
+                    resultSet.getDouble(3),
+                    resultSet.getLong(4)
+            );
+            return Optional.of(bill);
         } catch (SQLException e) {
             e.printStackTrace();
+            return Optional.empty();
         }
-        return null;
+    }
+
+    public List<Bill> getAllBillsByUser(long userId) {
+        try (Connection connection = DriverManager.getConnection(url);
+             PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_BILLS_BY_USER)) {
+            preparedStatement.setLong(1, userId);
+            resultSet = preparedStatement.executeQuery();
+            List<Bill> billList = new ArrayList<>();
+            while (resultSet.next()) {
+                Bill bill = new Bill(
+                        resultSet.getLong(1),
+                        resultSet.getLong(2),
+                        resultSet.getDouble(3),
+                        resultSet.getLong(4)
+                );
+                billList.add(bill);
+            }
+            return billList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

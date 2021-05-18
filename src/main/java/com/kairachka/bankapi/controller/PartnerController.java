@@ -1,4 +1,13 @@
 package com.kairachka.bankapi.controller;
 
-public class PartnerController {
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
+import java.io.IOException;
+
+public class PartnerController implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+
+    }
 }

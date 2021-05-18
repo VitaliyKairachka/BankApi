@@ -1,4 +1,13 @@
 package com.kairachka.bankapi.controller;
 
-public class ReplenishmentController {
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
+import java.io.IOException;
+
+public class ReplenishmentController implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+
+    }
 }

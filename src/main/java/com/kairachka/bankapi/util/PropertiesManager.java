@@ -1,13 +1,12 @@
 package com.kairachka.bankapi.util;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 public class PropertiesManager {
-    public static final String property = "src/main/resources/property/property";
-    FileInputStream fileInputStream;
+    private static final String property = "src/main/resources/property/property";
+    private FileInputStream fileInputStream;
     Properties properties = new Properties();
 
     public String getUrl() {
