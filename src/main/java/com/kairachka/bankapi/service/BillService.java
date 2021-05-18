@@ -2,7 +2,6 @@ package com.kairachka.bankapi.service;
 
 import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.exception.BillNotFoundException;
-import com.kairachka.bankapi.mapper.BillMapper;
 import com.kairachka.bankapi.repository.BillRepository;
 
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.Optional;
 
 public class BillService {
     BillRepository billRepository = new BillRepository();
-    BillMapper billMapper = new BillMapper();
 
     public boolean addBill(long id) {
         return billRepository.addBill(id);

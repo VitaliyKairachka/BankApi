@@ -2,6 +2,8 @@ package com.kairachka.bankapi.entity;
 
 import com.kairachka.bankapi.enums.Role;
 
+import java.util.Objects;
+
 public class User {
     long id;
     String login;
@@ -111,5 +113,18 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(middleName, user.middleName) && Objects.equals(passport, user.passport) && Objects.equals(mobilePhone, user.mobilePhone) && role == user.role;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, password, firstName, lastName, middleName, passport, mobilePhone, role);
     }
 }

@@ -27,14 +27,7 @@ public class UserService {
 
     public boolean authentication(String login, String password) {
         Optional<User> user = userRepository.getUser(login);
-//        return user.filter(value -> PasswordEncryption.checkPassword(password, value.getPassword())).isPresent();
-        if (user.isPresent()) {
-            System.out.println("true");
-            System.out.println(user.get().getPassword());
-            System.out.println(password);
-            System.out.println(PasswordEncryption.checkPassword(password, user.get().getPassword()));
-            return PasswordEncryption.checkPassword(password, user.get().getPassword());
-        } else return false;
+        return user.filter(value -> PasswordEncryption.checkPassword(password, value.getPassword())).isPresent();
 //        return user.map(value -> value.getPassword().equals(password)).orElse(false);
     }
 

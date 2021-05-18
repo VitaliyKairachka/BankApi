@@ -24,13 +24,6 @@ public class UserController implements HttpHandler {
                 } else {
                     exchange.sendResponseHeaders(403, -1);
                 }
-
-//                exchange.sendResponseHeaders(200);
-//                OutputStream output = exchange.getResponseBody();
-//                output.write(text.getBytes());
-//                output.flush();
-//                exchange.close();
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -8,9 +8,6 @@ public class PasswordEncryption {
     }
 
     public static boolean checkPassword(String candidate, String password) {
-        System.out.println("hello pidoras na encodere");
-        System.out.println(password);
-        System.out.println(candidate);
         return BCrypt.checkpw(candidate, password);
     }
 

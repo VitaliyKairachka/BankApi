@@ -22,14 +22,11 @@ public class BillController implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) {
-        System.out.println("Handle");
         try {
             if ("GET".equals(exchange.getRequestMethod())) {
                 if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
-                    String id = requestQuery.get("id");
-                    if (id != null) {
-                        System.out.println("if");
+                    if (requestQuery.get("id") != null) {
                         Bill bill = billService.getBillById(Long.parseLong(requestQuery.get("id")));
                         exchange.sendResponseHeaders(200, billMapper.BillToJson(bill).getBytes().length);
                         outputStream = exchange.getResponseBody();
