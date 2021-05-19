@@ -9,7 +9,6 @@ import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -24,23 +23,24 @@ public class BillController implements HttpHandler {
     public void handle(HttpExchange exchange) {
         try {
             if ("GET".equals(exchange.getRequestMethod())) {
-                if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
+                if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.get("id") != null) {
                         Bill bill = billService.getBillById(Long.parseLong(requestQuery.get("id")));
                         exchange.sendResponseHeaders(200, billMapper.BillToJson(bill).getBytes().length);
                         outputStream = exchange.getResponseBody();
                         outputStream.write(billMapper.BillToJson(bill).getBytes());
-                    } else {
+                    } else if (requestQuery.isEmpty()) {
                         List<Bill> billList =
-                                billService.getAllBillByUser
+                                billService.getAllBillsByUser
                                         (userService.getUserIdByLogin(exchange.getPrincipal().getUsername()));
                         exchange.sendResponseHeaders(200, billMapper.BillListToJson(billList).getBytes().length);
                         outputStream = exchange.getResponseBody();
                         outputStream.write(billMapper.BillListToJson(billList).getBytes());
+                    } else {
+                        exchange.sendResponseHeaders(404, -1);
                     }
                     outputStream.flush();
-                    exchange.close();
                 } else {
                     exchange.sendResponseHeaders(403, -1);
                 }
@@ -50,22 +50,17 @@ public class BillController implements HttpHandler {
                     if (!requestQuery.get("id").isEmpty()) {
                         if (billService.addBill(Long.parseLong(requestQuery.get("id")))) {
                             exchange.sendResponseHeaders(201, -1);
-                            exchange.close();
                         } else {
                             exchange.sendResponseHeaders(406, -1);
                         }
                     } else {
-                        exchange.sendResponseHeaders(406, -1);
+                        exchange.sendResponseHeaders(404, -1);
                     }
                 } else {
                     exchange.sendResponseHeaders(403, -1);
                 }
             } else {
-                try {
-                    exchange.sendResponseHeaders(405, -1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
         } catch (Exception e) {

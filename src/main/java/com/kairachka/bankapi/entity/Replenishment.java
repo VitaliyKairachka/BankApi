@@ -12,6 +12,12 @@ public class Replenishment {
         this.billId = billId;
     }
 
+    public Replenishment(long id, double sum, long billId) {
+        this.id = id;
+        this.sum = sum;
+        this.billId = billId;
+    }
+
     public long getId() {
         return id;
     }

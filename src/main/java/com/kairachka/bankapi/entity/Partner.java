@@ -7,7 +7,16 @@ public class Partner {
     String name;
     long partnerBill;
 
+    public Partner() {
+    }
+
     public Partner(String name, long partnerBill) {
+        this.name = name;
+        this.partnerBill = partnerBill;
+    }
+
+    public Partner(long id, String name, long partnerBill) {
+        this.id = id;
         this.name = name;
         this.partnerBill = partnerBill;
     }

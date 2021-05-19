@@ -67,5 +67,46 @@ public class BillRepository {
         }
     }
 
+    public double getBalanceBill(long billId) {
+        try(Connection connection = DriverManager.getConnection(url);
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "SELECT BALANCE FROM BILLS WHERE ID = ?"
+        )) {
+            preparedStatement.setLong(1, billId);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getDouble(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
+    public boolean plusBalance(long billId, double sum) {
+        try(Connection connection = DriverManager.getConnection(url);
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE BILLS SET BALANCE = (SELECT BALANCE + ?) WHERE ID = ?"
+        )) {
+            preparedStatement.setDouble(1, sum);
+            preparedStatement.setLong(2, billId);
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean minusBalance(long billId, double sum) {
+        try(Connection connection = DriverManager.getConnection(url);
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE BILLS SET BALANCE = (SELECT BALANCE - ?) WHERE ID = ?"
+            )) {
+            preparedStatement.setDouble(1, sum);
+            preparedStatement.setLong(2, billId);
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -22,7 +22,11 @@ public class UserService {
 
     public long getUserIdByLogin(String login) {
         Optional<User> user = userRepository.getUser(login);
-        return user.map(User::getId).orElse(0L);
+        if (user.isPresent()) {
+            return user.get().getId();
+        } else {
+            throw new UserNotFoundException("User not found exception");
+        }
     }
 
     public boolean authentication(String login, String password) {
@@ -35,6 +39,15 @@ public class UserService {
         Optional<User> user = userRepository.getUser(login);
         if (user.isPresent()) {
             return user.get().getRole();
+        } else {
+            throw new UserNotFoundException("User not found exception");
+        }
+    }
+
+    public User getUserByLogin(String login) {
+        Optional<User> user = userRepository.getUser(login);
+        if (user.isPresent()) {
+            return user.get();
         } else {
             throw new UserNotFoundException("User not found exception");
         }

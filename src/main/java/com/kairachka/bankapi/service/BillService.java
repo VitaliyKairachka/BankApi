@@ -23,8 +23,16 @@ public class BillService {
         }
     }
 
-    public List<Bill> getAllBillByUser (long id) {
+    public List<Bill> getAllBillsByUser(long id) {
         return billRepository.getAllBillsByUser(id);
+    }
+
+    public boolean plusBalance(long billId, double sum) {
+        return billRepository.plusBalance(billId, sum);
+    }
+
+    public boolean minusBalance(long billId, double sum) {
+        return billRepository.minusBalance(billId, sum);
     }
 
 

@@ -10,7 +10,25 @@ public class Operation {
     long userId;
     String status;
 
+    public Operation() {
+    }
+
+    public Operation(long sourceId, long targetId, double sum) {
+        this.sourceId = sourceId;
+        this.targetId = targetId;
+        this.sum = sum;
+    }
+
     public Operation(long sourceId, long targetId, double sum, long userId, String status) {
+        this.sourceId = sourceId;
+        this.targetId = targetId;
+        this.sum = sum;
+        this.userId = userId;
+        this.status = status;
+    }
+
+    public Operation(long id, long sourceId, long targetId, double sum, long userId, String status) {
+        this.id = id;
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.sum = sum;

@@ -10,5 +10,4 @@ public class PasswordEncryption {
     public static boolean checkPassword(String candidate, String password) {
         return BCrypt.checkpw(candidate, password);
     }
-
 }
