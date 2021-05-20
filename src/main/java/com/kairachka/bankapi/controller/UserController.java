@@ -1,15 +1,21 @@
 package com.kairachka.bankapi.controller;
 
+import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.enums.Role;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class UserController implements HttpHandler {
     private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Override
     public void handle(HttpExchange exchange) {
@@ -34,8 +40,10 @@ public class UserController implements HttpHandler {
                 exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (UserNotFoundException e) {
+            logger.info(e.getMessage());
         }
     }
 }

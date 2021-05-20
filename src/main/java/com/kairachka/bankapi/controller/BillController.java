@@ -4,6 +4,7 @@ import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.BillMapper;
 import com.kairachka.bankapi.service.Impl.BillServiceImpl;
 import com.kairachka.bankapi.service.Impl.UserServiceImpl;
@@ -40,10 +41,10 @@ public class BillController implements HttpHandler {
                             outputStream.flush();
                             outputStream.close();
                         } catch (NoAccessException e) {
-                            logger.warn("No access");
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(403, -1);
                         } catch (BillNotFoundException e) {
-                            logger.warn("Not found bill");
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(404, -1);
                         }
                     } else if (requestQuery.get("billId") != null) {
@@ -57,10 +58,10 @@ public class BillController implements HttpHandler {
                             outputStream.flush();
                             outputStream.close();
                         } catch (BillNotFoundException e) {
-                            logger.warn("Not found bill");
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(404, -1);
                         } catch (NoAccessException e) {
-                            logger.warn("No access");
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(403, -1);
                         }
                     } else if (requestQuery.isEmpty()) {
@@ -98,8 +99,11 @@ public class BillController implements HttpHandler {
             }
             exchange.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
+        } catch (UserNotFoundException e) {
+            logger.info(e.getMessage());
         }
     }
 }
+
 

@@ -5,7 +5,9 @@ import com.kairachka.bankapi.entity.Operation;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.OperationStatus;
 import com.kairachka.bankapi.exception.BillNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
 import com.kairachka.bankapi.exception.OperationNotFoundException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.OperationMapper;
 import com.kairachka.bankapi.repository.Impl.OperationRepositoryImpl;
 import com.kairachka.bankapi.service.OperationService;
@@ -20,7 +22,7 @@ public class OperationServiceImpl implements OperationService {
     private final BillServiceImpl billServiceImpl = new BillServiceImpl();
     private final UserServiceImpl userServiceImpl = new UserServiceImpl();
 
-    public boolean addOperation(HttpExchange exchange) {
+    public boolean addOperation(HttpExchange exchange) throws BillNotFoundException {
         Operation operation = operationMapper.JsonToOperation(exchange);
         Bill bill = billServiceImpl.getBillById(operation.getSourceId());
         if (bill.getBalance() - operation.getSum() >= 0) {
@@ -34,7 +36,8 @@ public class OperationServiceImpl implements OperationService {
         }
     }
 
-    public List<Operation> getAllOperationsByBillId(long id, String login) {
+    public List<Operation> getAllOperationsByBillId(long id, String login)
+            throws OperationNotFoundException, NoAccessException, BillNotFoundException, UserNotFoundException {
         User user = userServiceImpl.getUserByLogin(login);
         Bill bill = billServiceImpl.getBillById(id);
         if (user.getId() == bill.getUserId()) {
@@ -42,10 +45,10 @@ public class OperationServiceImpl implements OperationService {
             if (!operationList.isEmpty()) {
                 return operationList;
             } else {
-                throw new OperationNotFoundException("Operation not found exception");
+                throw new OperationNotFoundException();
             }
         } else {
-            throw new BillNotFoundException();
+            throw new NoAccessException();
         }
     }
 
@@ -57,7 +60,7 @@ public class OperationServiceImpl implements OperationService {
         return operationRepositoryImpl.getAllOperationsByStatus(status.toUpperCase());
     }
 
-    public boolean changeStatusOperation(long id, String status) {
+    public boolean changeStatusOperation(long id, String status) throws OperationNotFoundException {
         Optional<Operation> operation = operationRepositoryImpl.getOperationById(id);
         if (operation.isPresent()) {
             String statusUpdatableOperation = operation.get().getStatus();
@@ -82,7 +85,7 @@ public class OperationServiceImpl implements OperationService {
                 return false;
             }
         } else {
-            throw new OperationNotFoundException("Operation not found exception");
+            throw new OperationNotFoundException();
         }
     }
 }

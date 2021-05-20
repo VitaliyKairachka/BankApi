@@ -24,36 +24,35 @@ public class UserServiceImpl implements UserService {
         return userRepositoryImpl.addUser(user);
     }
 
-    public long getUserIdByLogin(String login) {
+    public long getUserIdByLogin(String login) throws UserNotFoundException {
         Optional<User> user = userRepositoryImpl.getUserByLogin(login);
         if (user.isPresent()) {
             return user.get().getId();
         } else {
-            throw new UserNotFoundException("User not found exception");
+            throw new UserNotFoundException();
         }
     }
 
     public boolean authentication(String login, String password) {
         Optional<User> user = userRepositoryImpl.getUserByLogin(login);
         return user.filter(value -> PasswordEncryption.checkPassword(password, value.getPassword())).isPresent();
-//        return user.map(value -> value.getPassword().equals(password)).orElse(false);
     }
 
-    public Role getRoleByLogin(String login) {
+    public Role getRoleByLogin(String login) throws UserNotFoundException {
         Optional<User> user = userRepositoryImpl.getUserByLogin(login);
         if (user.isPresent()) {
             return user.get().getRole();
         } else {
-            throw new UserNotFoundException("User not found exception");
+            throw new UserNotFoundException();
         }
     }
 
-    public User getUserByLogin(String login) {
+    public User getUserByLogin(String login) throws UserNotFoundException {
         Optional<User> user = userRepositoryImpl.getUserByLogin(login);
         if (user.isPresent()) {
             return user.get();
         } else {
-            throw new UserNotFoundException("User not found exception");
+            throw new UserNotFoundException();
         }
     }
 }

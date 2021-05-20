@@ -25,7 +25,7 @@ public class Server {
         try {
             server = HttpServer.create(new InetSocketAddress(serverPort), 0);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
         }
         assert server != null;
 

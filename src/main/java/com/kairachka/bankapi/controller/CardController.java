@@ -4,13 +4,18 @@ import com.kairachka.bankapi.entity.Card;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.CardNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.CardMapper;
 import com.kairachka.bankapi.service.Impl.CardServiceImpl;
 import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +24,7 @@ public class CardController implements HttpHandler {
     private final UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final CardServiceImpl cardServiceImpl = new CardServiceImpl();
     private final CardMapper cardMapper = new CardMapper();
+    private final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     @Override
     public void handle(HttpExchange exchange) {
@@ -41,8 +47,13 @@ public class CardController implements HttpHandler {
                             } else {
                                 exchange.sendResponseHeaders(404, -1);
                             }
-                        } catch (BillNotFoundException e) {
-                            e.printStackTrace();
+                        }
+                        catch (NoAccessException e) {
+                            logger.info(e.getMessage());
+                            exchange.sendResponseHeaders(403, -1);
+                        }
+                        catch (BillNotFoundException e) {
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(404, -1);
                         }
                     } else if (requestQuery.get("id") != null) {
@@ -54,9 +65,12 @@ public class CardController implements HttpHandler {
                             outputStream.write(cardMapper.CardToJson(card).getBytes());
                             outputStream.flush();
                             outputStream.close();
-                        } catch (CardNotFoundException e) {
-                            e.printStackTrace();
+                        } catch (CardNotFoundException | BillNotFoundException e) {
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(404, -1);
+                        } catch (NoAccessException e) {
+                            logger.info(e.getMessage());
+                            exchange.sendResponseHeaders(403, -1);
                         }
                     } else {
                         exchange.sendResponseHeaders(404, -1);
@@ -120,8 +134,10 @@ public class CardController implements HttpHandler {
                 exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (UserNotFoundException e) {
+            logger.info(e.getMessage());
         }
     }
 }

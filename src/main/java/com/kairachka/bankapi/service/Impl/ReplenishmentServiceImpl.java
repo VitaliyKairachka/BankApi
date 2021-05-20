@@ -4,6 +4,8 @@ import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.exception.BillNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.ReplenishmentMapper;
 import com.kairachka.bankapi.repository.Impl.ReplenishmentRepositoryImpl;
 import com.kairachka.bankapi.service.ReplenishmentService;
@@ -30,13 +32,14 @@ public class ReplenishmentServiceImpl implements ReplenishmentService {
         }
     }
 
-    public List<Replenishment> getAllReplenishmentByBill(long id, String login) {
+    public List<Replenishment> getAllReplenishmentByBill(long id, String login)
+            throws BillNotFoundException, NoAccessException, UserNotFoundException {
         User user = userServiceImpl.getUserByLogin(login);
         Bill bill = billServiceImpl.getBillById(id);
         if (user.getId() == bill.getUserId()) {
             return replenishmentRepositoryImpl.getAllReplenishmentByBill(id);
         } else {
-            throw new BillNotFoundException();
+            throw new NoAccessException();
         }
     }
 }

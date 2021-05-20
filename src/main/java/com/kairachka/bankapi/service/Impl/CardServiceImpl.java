@@ -6,6 +6,8 @@ import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.CardStatus;
 import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.CardNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.repository.Impl.CardRepositoryImpl;
 import com.kairachka.bankapi.service.CardService;
 
@@ -20,7 +22,7 @@ public class CardServiceImpl implements CardService {
     private final UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final BillServiceImpl billServiceImpl = new BillServiceImpl();
 
-    public boolean addCard(String login, long billId) {
+    public boolean addCard(String login, long billId) throws UserNotFoundException {
         try {
             User user = userServiceImpl.getUserByLogin(login);
             Bill bill = billServiceImpl.getBillById(billId);
@@ -42,7 +44,8 @@ public class CardServiceImpl implements CardService {
         }
     }
 
-    public Card getCardById(long id, String login) {
+    public Card getCardById(long id, String login)
+            throws BillNotFoundException, CardNotFoundException, NoAccessException, UserNotFoundException {
         Optional<Card> card = cardRepositoryImpl.getCardById(id);
         if (card.isPresent()) {
             Bill bill = billServiceImpl.getBillById(card.get().getBillId());
@@ -50,24 +53,23 @@ public class CardServiceImpl implements CardService {
             if (user.getId() == bill.getUserId()) {
                 return card.get();
             } else {
-                throw new CardNotFoundException("Card not found exception");
+                throw new NoAccessException();
             }
         } else {
             throw new CardNotFoundException();
         }
     }
 
-    public List<Card> getAllCardsByBill(long id, String login) {
+    public List<Card> getAllCardsByBill(long id, String login) throws NoAccessException, BillNotFoundException, UserNotFoundException {
         try {
             User user = userServiceImpl.getUserByLogin(login);
             Bill bill = billServiceImpl.getBillById(id);
             if (user.getId() == bill.getUserId()) {
                 return cardRepositoryImpl.getAllCardsByBill(id);
             } else {
-                throw new BillNotFoundException();
+                throw new NoAccessException();
             }
         } catch (BillNotFoundException e) {
-            e.printStackTrace();
             throw new BillNotFoundException();
         }
     }

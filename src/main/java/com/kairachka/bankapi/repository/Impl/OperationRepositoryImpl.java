@@ -4,6 +4,8 @@ import com.kairachka.bankapi.entity.Operation;
 import com.kairachka.bankapi.repository.OperationRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ public class OperationRepositoryImpl implements OperationRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final String url = propertiesManager.getUrl();
     private ResultSet resultSet = null;
+    private final Logger logger = LoggerFactory.getLogger(OperationRepositoryImpl.class);
 
     public boolean addOperation(Operation operation) {
         try (Connection connection = DriverManager.getConnection(url);
@@ -24,7 +27,7 @@ public class OperationRepositoryImpl implements OperationRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -47,7 +50,7 @@ public class OperationRepositoryImpl implements OperationRepository {
             }
             return operationList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return null;
         }
     }
@@ -69,7 +72,7 @@ public class OperationRepositoryImpl implements OperationRepository {
             }
             return operationList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return null;
         }
     }
@@ -92,7 +95,7 @@ public class OperationRepositoryImpl implements OperationRepository {
             }
             return operationList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return null;
         }
     }
@@ -104,7 +107,7 @@ public class OperationRepositoryImpl implements OperationRepository {
             preparedStatement.setLong(2, operationId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -124,7 +127,7 @@ public class OperationRepositoryImpl implements OperationRepository {
             );
             return Optional.of(operation);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return Optional.empty();
         }
     }

@@ -1,9 +1,12 @@
 package com.kairachka.bankapi.repository.Impl;
 
+import com.kairachka.bankapi.controller.BillController;
 import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.repository.BillRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ public class BillRepositoryImpl implements BillRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final String url = propertiesManager.getUrl();
     private ResultSet resultSet = null;
+    private final Logger logger = LoggerFactory.getLogger(BillRepositoryImpl.class);
 
     public boolean addBill(long userId) {
         try (Connection connection = DriverManager.getConnection(url);
@@ -22,7 +26,7 @@ public class BillRepositoryImpl implements BillRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -41,7 +45,7 @@ public class BillRepositoryImpl implements BillRepository {
             );
             return Optional.of(bill);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return Optional.empty();
         }
     }
@@ -63,7 +67,7 @@ public class BillRepositoryImpl implements BillRepository {
             }
             return billList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return null;
         }
     }
@@ -76,7 +80,7 @@ public class BillRepositoryImpl implements BillRepository {
             resultSet.next();
             return resultSet.getDouble(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return 0;
         }
     }
@@ -88,7 +92,7 @@ public class BillRepositoryImpl implements BillRepository {
             preparedStatement.setLong(2, billId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -100,7 +104,7 @@ public class BillRepositoryImpl implements BillRepository {
             preparedStatement.setLong(2, billId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return false;
         }
     }

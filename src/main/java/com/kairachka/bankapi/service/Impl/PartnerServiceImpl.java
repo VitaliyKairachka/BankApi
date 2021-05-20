@@ -18,12 +18,12 @@ public class PartnerServiceImpl implements PartnerService {
         return partnerRepositoryImpl.addPartner(partner);
     }
 
-    public List<Partner> getAllPartners() {
+    public List<Partner> getAllPartners() throws PartnerNotFoundException {
         List<Partner> partnerList = partnerRepositoryImpl.getAllPartners();
         if (!partnerList.isEmpty()) {
             return partnerList;
         } else {
-            throw new PartnerNotFoundException("Partner not found exception");
+            throw new PartnerNotFoundException();
         }
     }
 }

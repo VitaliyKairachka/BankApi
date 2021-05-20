@@ -5,6 +5,8 @@ import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.repository.UserRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Optional;
@@ -12,6 +14,7 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private final String url = propertiesManager.getUrl();
+    private final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     public boolean addUser(User user) {
         try (Connection connection = DriverManager.getConnection(url);
@@ -27,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return false;
         }
     }
@@ -50,7 +53,7 @@ public class UserRepositoryImpl implements UserRepository {
                     Role.valueOf(resultSet.getString(9)));
             return Optional.of(user);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.info(e.getMessage());
             return Optional.empty();
         }
     }

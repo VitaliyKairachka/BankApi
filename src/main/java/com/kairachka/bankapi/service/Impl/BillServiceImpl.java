@@ -4,6 +4,7 @@ import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.repository.Impl.BillRepositoryImpl;
 import com.kairachka.bankapi.service.BillService;
 
@@ -18,7 +19,7 @@ public class BillServiceImpl implements BillService {
         return billRepositoryImpl.addBill(id);
     }
 
-    public Bill getBillById(long id) {
+    public Bill getBillById(long id) throws BillNotFoundException {
         Optional<Bill> bill = billRepositoryImpl.getBillById(id);
         if (bill.isPresent()) {
             return bill.get();
@@ -28,7 +29,8 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Bill getBillByIdAndLogin(long id, String login) throws NoAccessException {
+    public Bill getBillByIdAndLogin(long id, String login)
+            throws UserNotFoundException, NoAccessException, BillNotFoundException {
         Optional<Bill> bill = billRepositoryImpl.getBillById(id);
         User user = userServiceImpl.getUserByLogin(login);
         if (bill.isPresent()) {
@@ -54,7 +56,7 @@ public class BillServiceImpl implements BillService {
         return billRepositoryImpl.minusBalance(billId, sum);
     }
 
-    public double getBalance(long billId, String login) {
+    public double getBalance(long billId, String login) throws NoAccessException, BillNotFoundException, UserNotFoundException {
         User user = userServiceImpl.getUserByLogin(login);
         Optional<Bill> bill = billRepositoryImpl.getBillById(billId);
         if (bill.isPresent()) {

@@ -3,13 +3,18 @@ package com.kairachka.bankapi.controller;
 import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.BillNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.ReplenishmentMapper;
 import com.kairachka.bankapi.service.Impl.ReplenishmentServiceImpl;
 import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +23,7 @@ public class ReplenishmentController implements HttpHandler {
     private final ReplenishmentServiceImpl replenishmentServiceImpl = new ReplenishmentServiceImpl();
     private final UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final ReplenishmentMapper replenishmentMapper = new ReplenishmentMapper();
+    private final Logger logger = LoggerFactory.getLogger(Replenishment.class);
 
     @Override
     public void handle(HttpExchange exchange) {
@@ -38,9 +44,12 @@ public class ReplenishmentController implements HttpHandler {
                                     replenishmentMapper.ReplenishmentListToJson(replenishmentList).getBytes());
                             outputStream.flush();
                             outputStream.close();
-                        } catch (BillNotFoundException e) {
-                            e.printStackTrace();
+                        } catch (BillNotFoundException | UserNotFoundException e) {
+                            logger.info(e.getMessage());
                             exchange.sendResponseHeaders(404, -1);
+                        } catch (NoAccessException e) {
+                            logger.info(e.getMessage());
+                            exchange.sendResponseHeaders(403, -1);
                         }
                     } else {
                         exchange.sendResponseHeaders(404, -1);
@@ -67,8 +76,10 @@ public class ReplenishmentController implements HttpHandler {
                 exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        } catch (UserNotFoundException e) {
+            logger.info(e.getMessage());
         }
     }
 }
