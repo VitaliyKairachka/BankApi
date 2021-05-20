@@ -6,8 +6,21 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.util.List;
 
+/**
+ *
+ */
 public interface PartnerService {
+    /**
+     *
+     * @param exchange
+     * @return
+     */
     boolean addPartner(HttpExchange exchange);
 
+    /**
+     *
+     * @return
+     * @throws PartnerNotFoundException
+     */
     List<Partner> getAllPartners() throws PartnerNotFoundException;
 }

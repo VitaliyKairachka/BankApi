@@ -18,6 +18,7 @@ public class OperationRepositoryImpl implements OperationRepository {
     private ResultSet resultSet = null;
     private final Logger logger = LoggerFactory.getLogger(OperationRepositoryImpl.class);
 
+    @Override
     public boolean addOperation(Operation operation) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_OPERATION)) {
@@ -32,6 +33,7 @@ public class OperationRepositoryImpl implements OperationRepository {
         }
     }
 
+    @Override
     public List<Operation> getAllOperationByBill(long billId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_OPERATION_BY_BILL)) {
@@ -55,6 +57,7 @@ public class OperationRepositoryImpl implements OperationRepository {
         }
     }
 
+    @Override
     public List<Operation> getAllOperation() {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_OPERATION)) {
@@ -77,6 +80,7 @@ public class OperationRepositoryImpl implements OperationRepository {
         }
     }
 
+    @Override
     public List<Operation> getAllOperationsByStatus(String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_OPERATIONS_BY_STATUS)) {
@@ -100,6 +104,7 @@ public class OperationRepositoryImpl implements OperationRepository {
         }
     }
 
+    @Override
     public boolean changeOperationStatus(long operationId, String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.CHANGE_OPERATION_STATUS)) {
@@ -112,6 +117,7 @@ public class OperationRepositoryImpl implements OperationRepository {
         }
     }
 
+    @Override
     public Optional<Operation> getOperationById(long operationId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_OPERATION_BY_ID)) {

@@ -10,24 +10,28 @@ import com.kairachka.bankapi.exception.OperationNotFoundException;
 import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.OperationMapper;
 import com.kairachka.bankapi.repository.Impl.OperationRepositoryImpl;
+import com.kairachka.bankapi.repository.OperationRepository;
+import com.kairachka.bankapi.service.BillService;
 import com.kairachka.bankapi.service.OperationService;
+import com.kairachka.bankapi.service.UserService;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.util.List;
 import java.util.Optional;
 
 public class OperationServiceImpl implements OperationService {
-    private final OperationRepositoryImpl operationRepositoryImpl = new OperationRepositoryImpl();
+    private final OperationRepository operationRepository = new OperationRepositoryImpl();
     private final OperationMapper operationMapper = new OperationMapper();
-    private final BillServiceImpl billServiceImpl = new BillServiceImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private final BillService billService = new BillServiceImpl();
+    private final UserService userService = new UserServiceImpl();
 
+    @Override
     public boolean addOperation(HttpExchange exchange) throws BillNotFoundException {
         Operation operation = operationMapper.JsonToOperation(exchange);
-        Bill bill = billServiceImpl.getBillById(operation.getSourceId());
+        Bill bill = billService.getBillById(operation.getSourceId());
         if (bill.getBalance() - operation.getSum() >= 0) {
-            if (operationRepositoryImpl.addOperation(operation)) {
-                return billServiceImpl.minusBalance(bill.getId(), operation.getSum());
+            if (operationRepository.addOperation(operation)) {
+                return billService.minusBalance(bill.getId(), operation.getSum());
             } else {
                 return false;
             }
@@ -36,12 +40,13 @@ public class OperationServiceImpl implements OperationService {
         }
     }
 
+    @Override
     public List<Operation> getAllOperationsByBillId(long id, String login)
             throws OperationNotFoundException, NoAccessException, BillNotFoundException, UserNotFoundException {
-        User user = userServiceImpl.getUserByLogin(login);
-        Bill bill = billServiceImpl.getBillById(id);
+        User user = userService.getUserByLogin(login);
+        Bill bill = billService.getBillById(id);
         if (user.getId() == bill.getUserId()) {
-            List<Operation> operationList = operationRepositoryImpl.getAllOperationByBill(id);
+            List<Operation> operationList = operationRepository.getAllOperationByBill(id);
             if (!operationList.isEmpty()) {
                 return operationList;
             } else {
@@ -52,31 +57,34 @@ public class OperationServiceImpl implements OperationService {
         }
     }
 
+    @Override
     public List<Operation> getAllOperations() {
-        return operationRepositoryImpl.getAllOperation();
+        return operationRepository.getAllOperation();
     }
 
+    @Override
     public List<Operation> getAllOperationsByStatus(String status) {
-        return operationRepositoryImpl.getAllOperationsByStatus(status.toUpperCase());
+        return operationRepository.getAllOperationsByStatus(status.toUpperCase());
     }
 
+    @Override
     public boolean changeStatusOperation(long id, String status) throws OperationNotFoundException {
-        Optional<Operation> operation = operationRepositoryImpl.getOperationById(id);
+        Optional<Operation> operation = operationRepository.getOperationById(id);
         if (operation.isPresent()) {
             String statusUpdatableOperation = operation.get().getStatus();
             if (status.toUpperCase().equals(OperationStatus.APPROVED.toString())) {
                 if (statusUpdatableOperation.toUpperCase().equals(OperationStatus.DECLINE.toString())) {
                     return false;
                 } else {
-                    operationRepositoryImpl.changeOperationStatus(id, status.toUpperCase());
+                    operationRepository.changeOperationStatus(id, status.toUpperCase());
                     return true;
                 }
             } else if (status.toUpperCase().equals(OperationStatus.DECLINE.toString())) {
                 if (statusUpdatableOperation.toUpperCase().equals(OperationStatus.APPROVED.toString())) {
                     return false;
                 } else {
-                    if (billServiceImpl.plusBalance(operation.get().getSourceId(), operation.get().getSum())) {
-                        return operationRepositoryImpl.changeOperationStatus(id, status.toUpperCase());
+                    if (billService.plusBalance(operation.get().getSourceId(), operation.get().getSum())) {
+                        return operationRepository.changeOperationStatus(id, status.toUpperCase());
                     } else {
                         return false;
                     }

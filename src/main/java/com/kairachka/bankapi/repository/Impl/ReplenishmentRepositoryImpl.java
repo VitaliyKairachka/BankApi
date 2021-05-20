@@ -16,6 +16,7 @@ public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
     private final String url = propertiesManager.getUrl();
     private final Logger logger = LoggerFactory.getLogger(ReplenishmentRepositoryImpl.class);
 
+    @Override
     public boolean addReplenishment(Replenishment replenishment) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_REPLENISHMENT)) {
@@ -29,6 +30,7 @@ public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
         }
     }
 
+    @Override
     public List<Replenishment> getAllReplenishmentByBill(long billId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement =

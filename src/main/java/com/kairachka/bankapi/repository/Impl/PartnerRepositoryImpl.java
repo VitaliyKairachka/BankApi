@@ -16,6 +16,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     private final String url = propertiesManager.getUrl();
     private final Logger logger = LoggerFactory.getLogger(PartnerRepositoryImpl.class);
 
+    @Override
     public boolean addPartner(Partner partner) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_PARTNER)) {
@@ -29,6 +30,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
         }
     }
 
+    @Override
     public List<Partner> getAllPartners() {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_PARTNERS)) {

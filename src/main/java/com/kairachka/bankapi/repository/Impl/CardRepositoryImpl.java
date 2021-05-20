@@ -18,6 +18,7 @@ public class CardRepositoryImpl implements CardRepository {
     private ResultSet resultSet = null;
     private final Logger logger = LoggerFactory.getLogger(CardRepositoryImpl.class);
 
+    @Override
     public boolean addCard(Card card) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_CARD)) {
@@ -33,6 +34,7 @@ public class CardRepositoryImpl implements CardRepository {
         }
     }
 
+    @Override
     public List<Card> getAllCardsByBill(long billId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_CARDS_BY_BILL)) {
@@ -58,6 +60,7 @@ public class CardRepositoryImpl implements CardRepository {
         }
     }
 
+    @Override
     public Optional<Card> getCardById(long cardId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_CARD_BY_ID)) {
@@ -80,6 +83,7 @@ public class CardRepositoryImpl implements CardRepository {
         }
     }
 
+    @Override
     public List<Card> getAllCards() {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_CARDS)) {
@@ -104,6 +108,7 @@ public class CardRepositoryImpl implements CardRepository {
         }
     }
 
+    @Override
     public List<Card> getAllCardsByStatus(String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_CARDS_BY_STATUS)) {
@@ -129,6 +134,7 @@ public class CardRepositoryImpl implements CardRepository {
         }
     }
 
+    @Override
     public boolean changeCardStatus(long cardId, String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.CHANGE_CARD_STATUS)) {

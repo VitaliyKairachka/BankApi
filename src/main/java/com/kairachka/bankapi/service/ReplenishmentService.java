@@ -8,9 +8,26 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.util.List;
 
+/**
+ *
+ */
 public interface ReplenishmentService {
+    /**
+     *
+     * @param exchange
+     * @return
+     */
     boolean addReplenishment(HttpExchange exchange);
 
+    /**
+     *
+     * @param id
+     * @param login
+     * @return
+     * @throws BillNotFoundException
+     * @throws NoAccessException
+     * @throws UserNotFoundException
+     */
     List<Replenishment> getAllReplenishmentByBill(long id, String login)
             throws BillNotFoundException, NoAccessException, UserNotFoundException;
 }

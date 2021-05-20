@@ -9,15 +9,50 @@ import com.sun.net.httpserver.HttpExchange;
 
 import java.util.List;
 
+/**
+ *
+ */
 public interface OperationService {
+    /**
+     *
+     * @param exchange
+     * @return
+     * @throws BillNotFoundException
+     */
     boolean addOperation(HttpExchange exchange) throws BillNotFoundException;
 
+    /**
+     *
+     * @param id
+     * @param login
+     * @return
+     * @throws BillNotFoundException
+     * @throws OperationNotFoundException
+     * @throws NoAccessException
+     * @throws UserNotFoundException
+     */
     List<Operation> getAllOperationsByBillId(long id, String login)
             throws BillNotFoundException, OperationNotFoundException, NoAccessException, UserNotFoundException;
 
+    /**
+     *
+     * @return
+     */
     List<Operation> getAllOperations();
 
+    /**
+     *
+     * @param status
+     * @return
+     */
     List<Operation> getAllOperationsByStatus(String status);
 
+    /**
+     *
+     * @param id
+     * @param status
+     * @return
+     * @throws OperationNotFoundException
+     */
     boolean changeStatusOperation(long id, String status) throws OperationNotFoundException;
 }

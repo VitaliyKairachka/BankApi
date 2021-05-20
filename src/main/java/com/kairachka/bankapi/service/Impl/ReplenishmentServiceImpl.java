@@ -8,22 +8,26 @@ import com.kairachka.bankapi.exception.NoAccessException;
 import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.ReplenishmentMapper;
 import com.kairachka.bankapi.repository.Impl.ReplenishmentRepositoryImpl;
+import com.kairachka.bankapi.repository.ReplenishmentRepository;
+import com.kairachka.bankapi.service.BillService;
 import com.kairachka.bankapi.service.ReplenishmentService;
+import com.kairachka.bankapi.service.UserService;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.util.List;
 
 public class ReplenishmentServiceImpl implements ReplenishmentService {
-    private final ReplenishmentRepositoryImpl replenishmentRepositoryImpl = new ReplenishmentRepositoryImpl();
+    private final ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
     private final ReplenishmentMapper replenishmentMapper = new ReplenishmentMapper();
-    private final BillServiceImpl billServiceImpl = new BillServiceImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private final BillService billService = new BillServiceImpl();
+    private final UserService userService = new UserServiceImpl();
 
+    @Override
     public boolean addReplenishment(HttpExchange exchange) {
         Replenishment replenishment = replenishmentMapper.JsonToReplenishment(exchange);
         if (replenishment.getSum() > 0) {
-            if (billServiceImpl.plusBalance(replenishment.getBillId(), replenishment.getSum())) {
-                return replenishmentRepositoryImpl.addReplenishment(replenishment);
+            if (billService.plusBalance(replenishment.getBillId(), replenishment.getSum())) {
+                return replenishmentRepository.addReplenishment(replenishment);
             } else {
                 return false;
             }
@@ -32,12 +36,13 @@ public class ReplenishmentServiceImpl implements ReplenishmentService {
         }
     }
 
+    @Override
     public List<Replenishment> getAllReplenishmentByBill(long id, String login)
             throws BillNotFoundException, NoAccessException, UserNotFoundException {
-        User user = userServiceImpl.getUserByLogin(login);
-        Bill bill = billServiceImpl.getBillById(id);
+        User user = userService.getUserByLogin(login);
+        Bill bill = billService.getBillById(id);
         if (user.getId() == bill.getUserId()) {
-            return replenishmentRepositoryImpl.getAllReplenishmentByBill(id);
+            return replenishmentRepository.getAllReplenishmentByBill(id);
         } else {
             throw new NoAccessException();
         }

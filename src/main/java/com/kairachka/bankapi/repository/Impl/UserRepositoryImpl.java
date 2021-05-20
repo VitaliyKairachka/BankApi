@@ -16,6 +16,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final String url = propertiesManager.getUrl();
     private final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
+    @Override
     public boolean addUser(User user) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_USER)) {
@@ -35,6 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
     public Optional<User> getUserByLogin(String login) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_USER_BY_LOGIN)) {

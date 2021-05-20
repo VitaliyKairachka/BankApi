@@ -8,8 +8,11 @@ import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.CardNotFoundException;
 import com.kairachka.bankapi.exception.NoAccessException;
 import com.kairachka.bankapi.exception.UserNotFoundException;
+import com.kairachka.bankapi.repository.CardRepository;
 import com.kairachka.bankapi.repository.Impl.CardRepositoryImpl;
+import com.kairachka.bankapi.service.BillService;
 import com.kairachka.bankapi.service.CardService;
+import com.kairachka.bankapi.service.UserService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,14 +21,15 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class CardServiceImpl implements CardService {
-    private final CardRepositoryImpl cardRepositoryImpl = new CardRepositoryImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
-    private final BillServiceImpl billServiceImpl = new BillServiceImpl();
+    private final CardRepository cardRepository = new CardRepositoryImpl();
+    private final UserService userService = new UserServiceImpl();
+    private final BillService billService = new BillServiceImpl();
 
+    @Override
     public boolean addCard(String login, long billId) throws UserNotFoundException {
         try {
-            User user = userServiceImpl.getUserByLogin(login);
-            Bill bill = billServiceImpl.getBillById(billId);
+            User user = userService.getUserByLogin(login);
+            Bill bill = billService.getBillById(billId);
             if (user.getId() == bill.getUserId()) {
                 String date = DateTimeFormatter.ofPattern("MM/yy", Locale.ENGLISH)
                         .format(LocalDate.now().plusYears(2));
@@ -34,7 +38,7 @@ public class CardServiceImpl implements CardService {
                         user.getFirstName(),
                         user.getLastName(),
                         billId);
-                return cardRepositoryImpl.addCard(card);
+                return cardRepository.addCard(card);
             } else {
                 return false;
             }
@@ -44,12 +48,13 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    @Override
     public Card getCardById(long id, String login)
             throws BillNotFoundException, CardNotFoundException, NoAccessException, UserNotFoundException {
-        Optional<Card> card = cardRepositoryImpl.getCardById(id);
+        Optional<Card> card = cardRepository.getCardById(id);
         if (card.isPresent()) {
-            Bill bill = billServiceImpl.getBillById(card.get().getBillId());
-            User user = userServiceImpl.getUserByLogin(login);
+            Bill bill = billService.getBillById(card.get().getBillId());
+            User user = userService.getUserByLogin(login);
             if (user.getId() == bill.getUserId()) {
                 return card.get();
             } else {
@@ -60,12 +65,13 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    @Override
     public List<Card> getAllCardsByBill(long id, String login) throws NoAccessException, BillNotFoundException, UserNotFoundException {
         try {
-            User user = userServiceImpl.getUserByLogin(login);
-            Bill bill = billServiceImpl.getBillById(id);
+            User user = userService.getUserByLogin(login);
+            Bill bill = billService.getBillById(id);
             if (user.getId() == bill.getUserId()) {
-                return cardRepositoryImpl.getAllCardsByBill(id);
+                return cardRepository.getAllCardsByBill(id);
             } else {
                 throw new NoAccessException();
             }
@@ -74,17 +80,20 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    @Override
     public List<Card> getAllCards() {
-        return cardRepositoryImpl.getAllCards();
+        return cardRepository.getAllCards();
     }
 
+    @Override
     public List<Card> getAllCardsByStatus(String status) {
-        return cardRepositoryImpl.getAllCardsByStatus(status.toUpperCase());
+        return cardRepository.getAllCardsByStatus(status.toUpperCase());
     }
 
+    @Override
     public boolean changeCardStatus(long id, String status) {
         if (status.toUpperCase().equals(CardStatus.NOT_ACTIVE.toString())) {
-            return cardRepositoryImpl.changeCardStatus(id, status.toUpperCase());
+            return cardRepository.changeCardStatus(id, status.toUpperCase());
         } else if (status.toUpperCase().equals(CardStatus.ACTIVE.toString())) {
             return false;
         } else {

@@ -19,6 +19,7 @@ public class BillRepositoryImpl implements BillRepository {
     private ResultSet resultSet = null;
     private final Logger logger = LoggerFactory.getLogger(BillRepositoryImpl.class);
 
+    @Override
     public boolean addBill(long userId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.ADD_BILL)) {
@@ -31,6 +32,7 @@ public class BillRepositoryImpl implements BillRepository {
         }
     }
 
+    @Override
     public Optional<Bill> getBillById(long billId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_BILL_BY_ID)) {
@@ -50,6 +52,7 @@ public class BillRepositoryImpl implements BillRepository {
         }
     }
 
+    @Override
     public List<Bill> getAllBillsByUser(long userId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_ALL_BILLS_BY_USER)) {
@@ -72,6 +75,7 @@ public class BillRepositoryImpl implements BillRepository {
         }
     }
 
+    @Override
     public double getBalanceBill(long billId) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.GET_BALANCE_BILL_BY_ID)) {
@@ -85,6 +89,7 @@ public class BillRepositoryImpl implements BillRepository {
         }
     }
 
+    @Override
     public boolean plusBalance(long billId, double sum) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.PLUS_BALANCE_BY_BILL)) {
@@ -97,6 +102,7 @@ public class BillRepositoryImpl implements BillRepository {
         }
     }
 
+    @Override
     public boolean minusBalance(long billId, double sum) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(QuerySQL.MINUS_BALANCE_BY_BILL)) {
