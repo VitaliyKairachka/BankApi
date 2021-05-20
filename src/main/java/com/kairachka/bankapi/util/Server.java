@@ -33,6 +33,7 @@ public class Server {
         server.createContext("/api/user/partners", partnerController).setAuthenticator(authenticator);
         server.createContext("/api/user/operations", operationController).setAuthenticator(authenticator);
 
+        server.createContext("/api/employee/bills", billController).setAuthenticator(authenticator);
         server.createContext("/api/employee/operations", operationController).setAuthenticator(authenticator);
         server.createContext("/api/employee/cards", cardController).setAuthenticator(authenticator);
         server.createContext("/api/employee/users", userController).setAuthenticator(authenticator);

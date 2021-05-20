@@ -110,7 +110,7 @@ public class CardRepository {
     public List<Card> getAllCardsByStatus(String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM CARDS WHERE STATUS = '?'"
+                     "SELECT * FROM CARDS WHERE STATUS = ?"
              )) {
             preparedStatement.setString(1, status);
             resultSet = preparedStatement.executeQuery();
@@ -137,7 +137,7 @@ public class CardRepository {
     public boolean changeCardStatus (long cardId, String status) {
         try(Connection connection = DriverManager.getConnection(url);
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "UPDATE CARDS SET STATUS = '?' WHERE ID = ?"
+                "UPDATE CARDS SET STATUS = ? WHERE ID = ?"
         )) {
             preparedStatement.setString(1, status);
             preparedStatement.setLong(2, cardId);

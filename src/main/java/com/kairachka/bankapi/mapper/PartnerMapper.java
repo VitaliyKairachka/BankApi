@@ -3,8 +3,6 @@ package com.kairachka.bankapi.mapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kairachka.bankapi.entity.Partner;
-import com.kairachka.bankapi.entity.Replenishment;
-import com.kairachka.bankapi.entity.User;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;

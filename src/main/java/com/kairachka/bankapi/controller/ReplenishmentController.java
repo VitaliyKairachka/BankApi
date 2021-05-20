@@ -2,6 +2,7 @@ package com.kairachka.bankapi.controller;
 
 import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.enums.Role;
+import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.mapper.ReplenishmentMapper;
 import com.kairachka.bankapi.service.ReplenishmentService;
 import com.kairachka.bankapi.service.UserService;
@@ -26,13 +27,19 @@ public class ReplenishmentController implements HttpHandler {
                 if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.get("billId") != null) {
-                        List<Replenishment> replenishmentList =
-                                replenishmentService.
-                                        getAllReplenishmentByBill(Long.parseLong(requestQuery.get("billId")));
-                        exchange.sendResponseHeaders(200,
-                                replenishmentMapper.ReplenishmentListToJson(replenishmentList).getBytes().length);
-                        outputStream = exchange.getResponseBody();
-                        outputStream.write(replenishmentMapper.ReplenishmentListToJson(replenishmentList).getBytes());
+                        try {
+                            List<Replenishment> replenishmentList =
+                                    replenishmentService.
+                                            getAllReplenishmentByBill(Long.parseLong(requestQuery.get("billId")), exchange.getPrincipal().getUsername());
+                            exchange.sendResponseHeaders(200,
+                                    replenishmentMapper.ReplenishmentListToJson(replenishmentList).getBytes().length);
+                            outputStream = exchange.getResponseBody();
+                            outputStream.write(replenishmentMapper.ReplenishmentListToJson(replenishmentList).getBytes());
+                            outputStream.flush();
+                        } catch (BillNotFoundException e) {
+                            e.printStackTrace();
+                            exchange.sendResponseHeaders(404, -1);
+                        }
                     } else {
                         exchange.sendResponseHeaders(404, -1);
                     }

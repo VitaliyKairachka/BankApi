@@ -7,7 +7,6 @@ public class Operation {
     long sourceId;
     long targetId;
     double sum;
-    long userId;
     String status;
 
     public Operation() {
@@ -19,20 +18,18 @@ public class Operation {
         this.sum = sum;
     }
 
-    public Operation(long sourceId, long targetId, double sum, long userId, String status) {
+    public Operation(long sourceId, long targetId, double sum, String status) {
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.sum = sum;
-        this.userId = userId;
         this.status = status;
     }
 
-    public Operation(long id, long sourceId, long targetId, double sum, long userId, String status) {
+    public Operation(long id, long sourceId, long targetId, double sum, String status) {
         this.id = id;
         this.sourceId = sourceId;
         this.targetId = targetId;
         this.sum = sum;
-        this.userId = userId;
         this.status = status;
     }
 
@@ -68,14 +65,6 @@ public class Operation {
         this.sum = sum;
     }
 
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -89,11 +78,11 @@ public class Operation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Operation operation = (Operation) o;
-        return id == operation.id && sourceId == operation.sourceId && targetId == operation.targetId && Double.compare(operation.sum, sum) == 0 && userId == operation.userId && Objects.equals(status, operation.status);
+        return id == operation.id && sourceId == operation.sourceId && targetId == operation.targetId && Double.compare(operation.sum, sum) == 0 && Objects.equals(status, operation.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sourceId, targetId, sum, userId, status);
+        return Objects.hash(id, sourceId, targetId, sum, status);
     }
 }

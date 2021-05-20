@@ -17,6 +17,9 @@ public class UserService {
     public boolean addUser(HttpExchange exchange) {
         User user = userMapper.JsonToUser(exchange);
         user.setPassword(PasswordEncryption.hashedPassword(user.getPassword()));
+        if (user.getRole() == null) {
+            user.setRole(Role.USER);
+        }
         return userRepository.addUser(user);
     }
 

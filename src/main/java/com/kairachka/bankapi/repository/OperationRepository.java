@@ -43,8 +43,7 @@ public class OperationRepository {
                         resultSet.getLong(2),
                         resultSet.getLong(3),
                         resultSet.getDouble(4),
-                        resultSet.getLong(5),
-                        resultSet.getString(6)
+                        resultSet.getString(5)
                 );
                 operationList.add(operation);
             }
@@ -68,8 +67,7 @@ public class OperationRepository {
                         resultSet.getLong(2),
                         resultSet.getLong(3),
                         resultSet.getDouble(4),
-                        resultSet.getLong(5),
-                        resultSet.getString(6)
+                        resultSet.getString(5)
                 );
                 operationList.add(operation);
             }
@@ -83,7 +81,7 @@ public class OperationRepository {
     public List<Operation> getAllOperationsByStatus(String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM OPERATIONS WHERE STATUS = '?'"
+                     "SELECT * FROM OPERATIONS WHERE STATUS = ?"
              )) {
             preparedStatement.setString(1, status);
             resultSet = preparedStatement.executeQuery();
@@ -94,8 +92,7 @@ public class OperationRepository {
                         resultSet.getLong(2),
                         resultSet.getLong(3),
                         resultSet.getDouble(4),
-                        resultSet.getLong(5),
-                        resultSet.getString(6)
+                        resultSet.getString(5)
                 );
                 operationList.add(operation);
             }
@@ -106,14 +103,13 @@ public class OperationRepository {
         }
     }
 
-    public boolean changeOperationStatus(long operationId, String status, long userId) {
+    public boolean changeOperationStatus(long operationId, String status) {
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "UPDATE OPERATIONS SET STATUS = '?', USER_ID = '?'  WHERE  ID = ?"
+                     "UPDATE OPERATIONS SET STATUS = ? WHERE  ID = ?"
              )) {
             preparedStatement.setString(1, status);
-            preparedStatement.setLong(2, userId);
-            preparedStatement.setLong(3, operationId);
+            preparedStatement.setLong(2, operationId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -134,8 +130,7 @@ public class OperationRepository {
                     resultSet.getLong(2),
                     resultSet.getLong(3),
                     resultSet.getDouble(4),
-                    resultSet.getLong(5),
-                    resultSet.getString(6)
+                    resultSet.getString(5)
             );
             return Optional.of(operation);
         } catch (SQLException e) {

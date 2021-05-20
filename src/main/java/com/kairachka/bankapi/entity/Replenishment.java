@@ -7,6 +7,9 @@ public class Replenishment {
     double sum;
     long billId;
 
+    public Replenishment() {
+    }
+
     public Replenishment(double sum, long billId) {
         this.sum = sum;
         this.billId = billId;

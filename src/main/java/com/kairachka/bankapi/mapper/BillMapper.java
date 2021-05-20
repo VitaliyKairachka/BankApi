@@ -37,4 +37,13 @@ public class BillMapper {
             return null;
         }
     }
+
+    public String balanceToJson(double balance) {
+        try {
+            return mapper.writeValueAsString(balance);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

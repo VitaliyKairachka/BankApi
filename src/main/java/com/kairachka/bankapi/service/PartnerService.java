@@ -1,6 +1,7 @@
 package com.kairachka.bankapi.service;
 
 import com.kairachka.bankapi.entity.Partner;
+import com.kairachka.bankapi.exception.PartnerNotFoundException;
 import com.kairachka.bankapi.mapper.PartnerMapper;
 import com.kairachka.bankapi.repository.PartnerRepository;
 import com.sun.net.httpserver.HttpExchange;
@@ -17,6 +18,11 @@ public class PartnerService {
     }
 
     public List<Partner> getAllPartners() {
-        return partnerRepository.getAllPartners();
+        List<Partner> partnerList = partnerRepository.getAllPartners();
+        if(!partnerList.isEmpty()) {
+            return partnerList;
+        } else {
+            throw new PartnerNotFoundException("Partner not found exception");
+        }
     }
 }
