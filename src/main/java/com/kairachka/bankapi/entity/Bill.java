@@ -1,6 +1,5 @@
 package com.kairachka.bankapi.entity;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Bill {
@@ -56,7 +55,8 @@ public class Bill {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bill bill = (Bill) o;
-        return id == bill.id && billNumber == bill.billNumber && Double.compare(bill.balance, balance) == 0 && userId == bill.userId;
+        return id == bill.id && billNumber == bill.billNumber &&
+                Double.compare(bill.balance, balance) == 0 && userId == bill.userId;
     }
 
     @Override

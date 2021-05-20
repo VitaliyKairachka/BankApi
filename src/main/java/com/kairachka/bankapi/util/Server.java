@@ -2,6 +2,8 @@ package com.kairachka.bankapi.util;
 
 import com.kairachka.bankapi.controller.*;
 import com.sun.net.httpserver.HttpServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,6 +18,7 @@ public class Server {
         PartnerController partnerController = new PartnerController();
         OperationController operationController = new OperationController();
         Authenticator authenticator = new Authenticator(propertiesManager.getRealm());
+        Logger logger = LoggerFactory.getLogger(Server.class);
 
         int serverPort = propertiesManager.getPort();
         HttpServer server = null;
@@ -40,7 +43,7 @@ public class Server {
 
         server.setExecutor(null);
         server.start();
-
+        logger.info("Server start");
     }
 }
 

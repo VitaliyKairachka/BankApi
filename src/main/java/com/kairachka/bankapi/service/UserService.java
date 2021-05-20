@@ -2,57 +2,16 @@ package com.kairachka.bankapi.service;
 
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
-import com.kairachka.bankapi.exception.UserNotFoundException;
-import com.kairachka.bankapi.mapper.UserMapper;
-import com.kairachka.bankapi.repository.UserRepository;
-import com.kairachka.bankapi.util.PasswordEncryption;
 import com.sun.net.httpserver.HttpExchange;
 
-import java.util.Optional;
+public interface UserService {
+    boolean addUser(HttpExchange exchange);
 
-public class UserService {
-    UserRepository userRepository = new UserRepository();
-    UserMapper userMapper = new UserMapper();
+    long getUserIdByLogin(String login);
 
-    public boolean addUser(HttpExchange exchange) {
-        User user = userMapper.JsonToUser(exchange);
-        user.setPassword(PasswordEncryption.hashedPassword(user.getPassword()));
-        if (user.getRole() == null) {
-            user.setRole(Role.USER);
-        }
-        return userRepository.addUser(user);
-    }
+    boolean authentication(String login, String password);
 
-    public long getUserIdByLogin(String login) {
-        Optional<User> user = userRepository.getUser(login);
-        if (user.isPresent()) {
-            return user.get().getId();
-        } else {
-            throw new UserNotFoundException("User not found exception");
-        }
-    }
+    Role getRoleByLogin(String login);
 
-    public boolean authentication(String login, String password) {
-        Optional<User> user = userRepository.getUser(login);
-        return user.filter(value -> PasswordEncryption.checkPassword(password, value.getPassword())).isPresent();
-//        return user.map(value -> value.getPassword().equals(password)).orElse(false);
-    }
-
-    public Role getRoleByLogin(String login) {
-        Optional<User> user = userRepository.getUser(login);
-        if (user.isPresent()) {
-            return user.get().getRole();
-        } else {
-            throw new UserNotFoundException("User not found exception");
-        }
-    }
-
-    public User getUserByLogin(String login) {
-        Optional<User> user = userRepository.getUser(login);
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new UserNotFoundException("User not found exception");
-        }
-    }
+    User getUserByLogin(String login);
 }

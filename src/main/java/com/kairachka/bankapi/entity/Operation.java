@@ -78,7 +78,8 @@ public class Operation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Operation operation = (Operation) o;
-        return id == operation.id && sourceId == operation.sourceId && targetId == operation.targetId && Double.compare(operation.sum, sum) == 0 && Objects.equals(status, operation.status);
+        return id == operation.id && sourceId == operation.sourceId && targetId == operation.targetId &&
+                Double.compare(operation.sum, sum) == 0 && Objects.equals(status, operation.status);
     }
 
     @Override

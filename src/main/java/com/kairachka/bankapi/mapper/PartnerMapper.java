@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class PartnerMapper {
-    ObjectMapper mapper = new ObjectMapper();
-    public Partner JsonToPartner (HttpExchange exchange) {
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public Partner JsonToPartner(HttpExchange exchange) {
         try {
             return mapper.readValue(exchange.getRequestBody(), Partner.class);
         } catch (IOException e) {
@@ -19,16 +20,7 @@ public class PartnerMapper {
         }
     }
 
-    public String PartnerToJson (Partner partner) {
-        try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(partner);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public String PartnerListToJson(List<Partner> list){
+    public String PartnerListToJson(List<Partner> list) {
         try {
             return mapper.writeValueAsString(list);
         } catch (JsonProcessingException e) {

@@ -1,7 +1,7 @@
 package com.kairachka.bankapi.exception;
 
-public class UserNotFoundException extends RuntimeException{
-    public UserNotFoundException(String message) {
-        super(message);
+public class UserNotFoundException extends Exception {
+    public UserNotFoundException() {
+        super("User not found exception");
     }
 }

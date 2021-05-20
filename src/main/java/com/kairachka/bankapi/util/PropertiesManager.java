@@ -6,12 +6,10 @@ import java.util.Properties;
 
 public class PropertiesManager {
     private static final String property = "src/main/resources/property/property";
-    private FileInputStream fileInputStream;
-    Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
     public String getUrl() {
-        try {
-            fileInputStream = new FileInputStream(property);
+        try (FileInputStream fileInputStream = new FileInputStream(property)) {
             properties.load(fileInputStream);
             return properties.getProperty("connection.url");
         } catch (IOException e) {
@@ -21,8 +19,7 @@ public class PropertiesManager {
     }
 
     public int getPort() {
-        try{
-            fileInputStream = new FileInputStream(property);
+        try (FileInputStream fileInputStream = new FileInputStream(property)) {
             properties.load(fileInputStream);
             return Integer.parseInt(properties.getProperty("server.port"));
         } catch (IOException e) {
@@ -32,8 +29,7 @@ public class PropertiesManager {
     }
 
     public String getRealm() {
-        try{
-            fileInputStream = new FileInputStream(property);
+        try (FileInputStream fileInputStream = new FileInputStream(property)) {
             properties.load(fileInputStream);
             return properties.getProperty("authenticator.realm");
         } catch (IOException e) {

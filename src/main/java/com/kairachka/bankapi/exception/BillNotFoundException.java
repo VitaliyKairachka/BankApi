@@ -1,7 +1,7 @@
 package com.kairachka.bankapi.exception;
 
-public class BillNotFoundException extends RuntimeException{
-    public BillNotFoundException(String message) {
-        super(message);
+public class BillNotFoundException extends Exception {
+    public BillNotFoundException() {
+        super("Bill not found exception");
     }
 }

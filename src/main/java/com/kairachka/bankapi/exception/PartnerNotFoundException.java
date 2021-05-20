@@ -1,7 +1,7 @@
 package com.kairachka.bankapi.exception;
 
-public class PartnerNotFoundException extends RuntimeException{
-    public PartnerNotFoundException(String message) {
-        super(message);
+public class PartnerNotFoundException extends Exception {
+    public PartnerNotFoundException() {
+        super("Partner not found exception");
     }
 }

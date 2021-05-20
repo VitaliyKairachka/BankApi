@@ -2,7 +2,6 @@ package com.kairachka.bankapi.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.entity.Operation;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -10,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class OperationMapper {
-    ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public Operation JsonToOperation(HttpExchange exchange) {
         try {
@@ -21,16 +20,7 @@ public class OperationMapper {
         }
     }
 
-    public String OperationToJson(Operation operation) {
-        try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(operation);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public String OperationListToJson(List<Operation> list){
+    public String OperationListToJson(List<Operation> list) {
         try {
             return mapper.writeValueAsString(list);
         } catch (JsonProcessingException e) {

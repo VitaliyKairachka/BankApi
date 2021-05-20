@@ -9,20 +9,12 @@ import java.io.IOException;
 
 
 public class UserMapper {
-    ObjectMapper mapper = new ObjectMapper();
-    public User JsonToUser (HttpExchange exchange) {
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public User JsonToUser(HttpExchange exchange) {
         try {
             return mapper.readValue(exchange.getRequestBody(), User.class);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public String UserToJson (User user) {
-        try {
-            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(user);
-        } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
         }

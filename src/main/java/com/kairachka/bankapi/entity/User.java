@@ -120,7 +120,10 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(middleName, user.middleName) && Objects.equals(passport, user.passport) && Objects.equals(mobilePhone, user.mobilePhone) && role == user.role;
+        return id == user.id && Objects.equals(login, user.login) && Objects.equals(password, user.password) &&
+                Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) &&
+                Objects.equals(middleName, user.middleName) && Objects.equals(passport, user.passport) &&
+                Objects.equals(mobilePhone, user.mobilePhone) && role == user.role;
     }
 
     @Override

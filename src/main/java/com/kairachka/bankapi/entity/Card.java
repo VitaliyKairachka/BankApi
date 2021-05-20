@@ -21,7 +21,8 @@ public class Card {
         this.billId = billId;
     }
 
-    public Card(long id, long cardNumber, String expires, String firstName, String lastName, long billId, String status) {
+    public Card(
+            long id, long cardNumber, String expires, String firstName, String lastName, long billId, String status) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.expires = expires;

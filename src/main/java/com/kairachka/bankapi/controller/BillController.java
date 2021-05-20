@@ -3,59 +3,75 @@ package com.kairachka.bankapi.controller;
 import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.BillNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
 import com.kairachka.bankapi.mapper.BillMapper;
-import com.kairachka.bankapi.service.BillService;
-import com.kairachka.bankapi.service.UserService;
+import com.kairachka.bankapi.service.Impl.BillServiceImpl;
+import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
 public class BillController implements HttpHandler {
-    BillService billService = new BillService();
-    UserService userService = new UserService();
-    BillMapper billMapper = new BillMapper();
-    OutputStream outputStream;
+    private final BillServiceImpl billServiceImpl = new BillServiceImpl();
+    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private final BillMapper billMapper = new BillMapper();
+    private final Logger logger = LoggerFactory.getLogger(BillController.class);
 
     @Override
     public void handle(HttpExchange exchange) {
         try {
             if ("GET".equals(exchange.getRequestMethod())) {
-                if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
+                if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.get("id") != null) {
                         try {
-                            Bill bill = billService.getBillById(Long.parseLong(requestQuery.get("id")));
+                            Bill bill = billServiceImpl.getBillByIdAndLogin(Long.parseLong(requestQuery.get("id")),
+                                    exchange.getPrincipal().getUsername());
                             exchange.sendResponseHeaders(200, billMapper.BillToJson(bill).getBytes().length);
-                            outputStream = exchange.getResponseBody();
+                            OutputStream outputStream = exchange.getResponseBody();
                             outputStream.write(billMapper.BillToJson(bill).getBytes());
                             outputStream.flush();
+                            outputStream.close();
+                        } catch (NoAccessException e) {
+                            logger.warn("No access");
+                            exchange.sendResponseHeaders(403, -1);
                         } catch (BillNotFoundException e) {
-                            e.printStackTrace();
+                            logger.warn("Not found bill");
                             exchange.sendResponseHeaders(404, -1);
                         }
                     } else if (requestQuery.get("billId") != null) {
                         try {
-                            double balance = billService.getBalance(Long.parseLong(requestQuery.get("billId")), exchange.getPrincipal().getUsername());
-                            exchange.sendResponseHeaders(200, billMapper.balanceToJson(balance).getBytes().length);
-                            outputStream = exchange.getResponseBody();
+                            double balance = billServiceImpl.getBalance(Long.parseLong(requestQuery.get("billId")),
+                                    exchange.getPrincipal().getUsername());
+                            exchange.sendResponseHeaders(200,
+                                    billMapper.balanceToJson(balance).getBytes().length);
+                            OutputStream outputStream = exchange.getResponseBody();
                             outputStream.write(billMapper.balanceToJson(balance).getBytes());
                             outputStream.flush();
+                            outputStream.close();
                         } catch (BillNotFoundException e) {
-                            e.printStackTrace();
+                            logger.warn("Not found bill");
                             exchange.sendResponseHeaders(404, -1);
+                        } catch (NoAccessException e) {
+                            logger.warn("No access");
+                            exchange.sendResponseHeaders(403, -1);
                         }
                     } else if (requestQuery.isEmpty()) {
                         List<Bill> billList =
-                                billService.getAllBillsByUser
-                                        (userService.getUserIdByLogin(exchange.getPrincipal().getUsername()));
+                                billServiceImpl.getAllBillsByUser
+                                        (userServiceImpl.getUserIdByLogin(exchange.getPrincipal().getUsername()));
                         exchange.sendResponseHeaders(200, billMapper.BillListToJson(billList).getBytes().length);
-                        outputStream = exchange.getResponseBody();
+                        OutputStream outputStream = exchange.getResponseBody();
                         outputStream.write(billMapper.BillListToJson(billList).getBytes());
                         outputStream.flush();
+                        outputStream.close();
                     } else {
                         exchange.sendResponseHeaders(404, -1);
                     }
@@ -63,10 +79,10 @@ public class BillController implements HttpHandler {
                     exchange.sendResponseHeaders(403, -1);
                 }
             } else if ("POST".equals(exchange.getRequestMethod())) {
-                if (userService.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
+                if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.get("id") != null) {
-                        if (billService.addBill(Long.parseLong(requestQuery.get("id")))) {
+                        if (billServiceImpl.addBill(Long.parseLong(requestQuery.get("id")))) {
                             exchange.sendResponseHeaders(201, -1);
                         } else {
                             exchange.sendResponseHeaders(406, -1);
@@ -81,7 +97,7 @@ public class BillController implements HttpHandler {
                 exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
