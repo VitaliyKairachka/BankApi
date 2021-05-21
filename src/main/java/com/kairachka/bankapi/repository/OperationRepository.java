@@ -6,9 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для запросов к базе данных операций
+ * Слой для запросов к базе данных операций
  */
 public interface OperationRepository {
+    /**
+     *
+     * @param url
+     */
+    void setUrl(String url);
+
     /**
      * Запрос к базе данных для создания новой операции
      *

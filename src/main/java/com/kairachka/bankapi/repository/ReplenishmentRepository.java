@@ -5,9 +5,15 @@ import com.kairachka.bankapi.entity.Replenishment;
 import java.util.List;
 
 /**
- * Репозиторий для запросов к базе данных пополнеия счёта
+ * Слой для запросов к базе данных пополнеия счёта
  */
 public interface ReplenishmentRepository {
+    /**
+     *
+     * @param url
+     */
+    void setUrl(String url);
+
     /**
      * Запрос к базе данных для создания пополнения счёта
      *

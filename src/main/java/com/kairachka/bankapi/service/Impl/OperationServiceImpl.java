@@ -20,16 +20,23 @@ import java.util.List;
 import java.util.Optional;
 
 public class OperationServiceImpl implements OperationService {
-    private final OperationRepository operationRepository = new OperationRepositoryImpl();
+    private OperationRepository operationRepository = new OperationRepositoryImpl();
     private final OperationMapper operationMapper = new OperationMapper();
     private final BillService billService = new BillServiceImpl();
     private final UserService userService = new UserServiceImpl();
+
+    public OperationServiceImpl() {
+    }
+
+    public OperationServiceImpl(OperationRepository operationRepository) {
+        this.operationRepository = operationRepository;
+    }
 
     @Override
     public boolean addOperation(HttpExchange exchange) throws BillNotFoundException {
         Operation operation = operationMapper.JsonToOperation(exchange);
         Bill bill = billService.getBillById(operation.getSourceId());
-        if (bill.getBalance() - operation.getSum() >= 0) {
+        if (bill.getBalance() - operation.getSum() >= 0 && bill.getBalance() > 0) {
             if (operationRepository.addOperation(operation)) {
                 return billService.minusBalance(bill.getId(), operation.getSum());
             } else {

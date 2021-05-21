@@ -21,9 +21,16 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class CardServiceImpl implements CardService {
-    private final CardRepository cardRepository = new CardRepositoryImpl();
+    private CardRepository cardRepository = new CardRepositoryImpl();
     private final UserService userService = new UserServiceImpl();
     private final BillService billService = new BillServiceImpl();
+
+    public CardServiceImpl() {
+    }
+
+    public CardServiceImpl(CardRepository cardRepository) {
+        this.cardRepository = cardRepository;
+    }
 
     @Override
     public boolean addCard(String login, long billId) throws UserNotFoundException {

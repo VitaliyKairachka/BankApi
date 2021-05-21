@@ -13,8 +13,13 @@ import java.util.List;
 
 public class PartnerRepositoryImpl implements PartnerRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final String url = propertiesManager.getUrl();
+    private String url = propertiesManager.getUrl();
     private final Logger logger = LoggerFactory.getLogger(PartnerRepositoryImpl.class);
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public boolean addPartner(Partner partner) {

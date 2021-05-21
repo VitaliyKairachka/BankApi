@@ -13,8 +13,13 @@ import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final String url = propertiesManager.getUrl();
+    private String url = propertiesManager.getUrl();
     private final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public boolean addUser(User user) {

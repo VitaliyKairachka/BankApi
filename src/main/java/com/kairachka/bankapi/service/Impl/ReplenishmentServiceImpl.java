@@ -17,10 +17,17 @@ import com.sun.net.httpserver.HttpExchange;
 import java.util.List;
 
 public class ReplenishmentServiceImpl implements ReplenishmentService {
-    private final ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
+    private ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
     private final ReplenishmentMapper replenishmentMapper = new ReplenishmentMapper();
     private final BillService billService = new BillServiceImpl();
     private final UserService userService = new UserServiceImpl();
+
+    public ReplenishmentServiceImpl() {
+    }
+
+    public ReplenishmentServiceImpl(ReplenishmentRepository replenishmentRepository) {
+        this.replenishmentRepository = replenishmentRepository;
+    }
 
     @Override
     public boolean addReplenishment(HttpExchange exchange) {

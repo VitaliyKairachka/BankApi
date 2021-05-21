@@ -1,6 +1,5 @@
 package com.kairachka.bankapi.repository.Impl;
 
-import com.kairachka.bankapi.controller.BillController;
 import com.kairachka.bankapi.entity.Bill;
 import com.kairachka.bankapi.repository.BillRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
@@ -15,9 +14,14 @@ import java.util.Optional;
 
 public class BillRepositoryImpl implements BillRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final String url = propertiesManager.getUrl();
-    private ResultSet resultSet = null;
+    private String url = propertiesManager.getUrl();
+    private ResultSet resultSet;
     private final Logger logger = LoggerFactory.getLogger(BillRepositoryImpl.class);
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public boolean addBill(long userId) {

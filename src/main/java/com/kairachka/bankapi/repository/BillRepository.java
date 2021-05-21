@@ -6,9 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Репозиторий для запросов к базе данных счетов
+ * Слой для запросов к базе данных счетов
  */
 public interface BillRepository {
+    /**
+     *
+     * @param url
+     */
+    void setUrl(String url);
 
     /**
      * Запрос к базе данных для создания нового счёта для пользователя

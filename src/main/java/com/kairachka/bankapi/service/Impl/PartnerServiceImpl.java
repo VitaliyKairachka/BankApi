@@ -11,8 +11,15 @@ import com.sun.net.httpserver.HttpExchange;
 import java.util.List;
 
 public class PartnerServiceImpl implements PartnerService {
-    private final PartnerRepository partnerRepository = new PartnerRepositoryImpl();
+    private PartnerRepository partnerRepository = new PartnerRepositoryImpl();
     private final PartnerMapper partnerMapper = new PartnerMapper();
+
+    public PartnerServiceImpl() {
+    }
+
+    public PartnerServiceImpl(PartnerRepository partnerRepository) {
+        this.partnerRepository = partnerRepository;
+    }
 
     @Override
     public boolean addPartner(HttpExchange exchange) {

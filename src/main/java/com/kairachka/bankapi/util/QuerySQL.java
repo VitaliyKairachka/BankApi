@@ -7,8 +7,6 @@ public class QuerySQL {
 
     public static final String GET_USER_BY_LOGIN = "SELECT * FROM USERS WHERE LOGIN = ?";
 
-    public static final String GET_USER_BY_ID = "SELECT * FROM USERS WHERE ID = ?";
-
     public static final String ADD_BILL = "INSERT INTO BILLS(USER_ID) VALUES (?)";
 
     public static final String GET_BILL_BY_ID = "SELECT * FROM BILLS WHERE ID = ?";

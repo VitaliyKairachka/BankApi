@@ -13,8 +13,15 @@ import com.sun.net.httpserver.HttpExchange;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private UserRepository userRepository = new UserRepositoryImpl();
     private final UserMapper userMapper = new UserMapper();
+
+    public UserServiceImpl() {
+    }
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public boolean addUser(HttpExchange exchange) {

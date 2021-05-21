@@ -13,8 +13,13 @@ import java.util.List;
 
 public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final String url = propertiesManager.getUrl();
+    private String url = propertiesManager.getUrl();
     private final Logger logger = LoggerFactory.getLogger(ReplenishmentRepositoryImpl.class);
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public boolean addReplenishment(Replenishment replenishment) {

@@ -5,9 +5,15 @@ import com.kairachka.bankapi.entity.User;
 import java.util.Optional;
 
 /**
- * Репозиторий для запросов к базе данных пользователей
+ * Слой для запросов к базе данных пользователей
  */
 public interface UserRepository {
+    /**
+     *
+     * @param url
+     */
+    void setUrl(String url);
+
     /**
      * Запрос к базе данных для создания нового пользователя
      *

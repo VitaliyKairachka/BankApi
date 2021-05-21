@@ -14,9 +14,14 @@ import java.util.Optional;
 
 public class CardRepositoryImpl implements CardRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
-    private final String url = propertiesManager.getUrl();
-    private ResultSet resultSet = null;
+    private String url = propertiesManager.getUrl();
+    private ResultSet resultSet;
     private final Logger logger = LoggerFactory.getLogger(CardRepositoryImpl.class);
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public boolean addCard(Card card) {

@@ -5,9 +5,15 @@ import com.kairachka.bankapi.entity.Partner;
 import java.util.List;
 
 /**
- *  Репозиторий для запросов к базе данных контрагентов
+ *  Слой для запросов к базе данных контрагентов
  */
 public interface PartnerRepository {
+    /**
+     *
+     * @param url
+     */
+    void setUrl(String url);
+
     /**
      * Запрос к базе данных для создания нового контрагента
      *

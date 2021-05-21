@@ -14,8 +14,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class BillServiceImpl implements BillService {
-    private final BillRepository billRepository = new BillRepositoryImpl();
-    private final UserService userService = new UserServiceImpl();
+    private BillRepository billRepository = new BillRepositoryImpl();
+    private UserService userService = new UserServiceImpl();
+
+    public BillServiceImpl() {
+    }
+
+    public BillServiceImpl(BillRepository billRepository, UserService userService) {
+        this.billRepository = billRepository;
+        this.userService = userService;
+    }
 
     @Override
     public boolean addBill(long id) {
@@ -64,7 +72,8 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public double getBalance(long billId, String login) throws NoAccessException, BillNotFoundException, UserNotFoundException {
+    public double getBalance(long billId, String login)
+            throws NoAccessException, BillNotFoundException, UserNotFoundException {
         User user = userService.getUserByLogin(login);
         Optional<Bill> bill = billRepository.getBillById(billId);
         if (bill.isPresent()) {
