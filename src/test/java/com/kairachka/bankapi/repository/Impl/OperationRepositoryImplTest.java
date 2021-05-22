@@ -22,187 +22,163 @@ public class OperationRepositoryImplTest {
     private static final String deleteTable = "src/test/resources/SQLScripts/Operation/DeleteTableOperation";
 
     @Test
-    public void addOperation() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            operationRepository.setUrl(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            assertTrue(operationRepository.addOperation(new Operation()));
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertFalse(operationRepository.addOperation(new Operation()));
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void addOperation() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        operationRepository.setUrl(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        assertTrue(operationRepository.addOperation(new Operation()));
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertFalse(operationRepository.addOperation(new Operation()));
+        connection.close();
     }
 
     @Test
-    public void getAllOperationByBill() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            operationRepository.setUrl(url);
-            PreparedStatement operation1 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
-            PreparedStatement operation2 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 2, 200 )");
-            operation1.execute();
-            operation2.execute();
-            PreparedStatement getAllOperation =
-                    connection.prepareStatement("SELECT * FROM OPERATIONS WHERE SOURCE = 1");
-            resultSet = getAllOperation.executeQuery();
-            List<Operation> operationList = new ArrayList<>();
-            while (resultSet.next()) {
-                Operation operation = new Operation(
-                        resultSet.getLong(1),
-                        resultSet.getLong(2),
-                        resultSet.getLong(3),
-                        resultSet.getDouble(4),
-                        resultSet.getString(5)
-                );
-                operationList.add(operation);
-            }
-            assertEquals(operationList, operationRepository.getAllOperationByBill(1));
-            operation1.close();
-            operation2.close();
-            getAllOperation.close();
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertNull(operationRepository.getAllOperationByBill(1));
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void getAllOperation() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            operationRepository.setUrl(url);
-            PreparedStatement operation1 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
-            PreparedStatement operation2 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 2, 2, 200 )");
-            operation1.execute();
-            operation2.execute();
-            PreparedStatement getAllOperation = connection.prepareStatement("SELECT * FROM OPERATIONS");
-            resultSet = getAllOperation.executeQuery();
-            List<Operation> operationList = new ArrayList<>();
-            while (resultSet.next()) {
-                Operation operation = new Operation(
-                        resultSet.getLong(1),
-                        resultSet.getLong(2),
-                        resultSet.getLong(3),
-                        resultSet.getDouble(4),
-                        resultSet.getString(5)
-                );
-                operationList.add(operation);
-            }
-            assertEquals(operationList, operationRepository.getAllOperation());
-            operation1.close();
-            operation2.close();
-            getAllOperation.close();
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertNull(operationRepository.getAllOperation());
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void getAllOperationsByStatus() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            operationRepository.setUrl(url);
-            PreparedStatement operation1 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
-            PreparedStatement operation2 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 2, 2, 200 )");
-            operation1.execute();
-            operation2.execute();
-            PreparedStatement getAllOperation =
-                    connection.prepareStatement("SELECT * FROM OPERATIONS WHERE STATUS = 'UNAPPROVED'");
-            resultSet = getAllOperation.executeQuery();
-            List<Operation> operationList = new ArrayList<>();
-            while (resultSet.next()) {
-                Operation operation = new Operation(
-                        resultSet.getLong(1),
-                        resultSet.getLong(2),
-                        resultSet.getLong(3),
-                        resultSet.getDouble(4),
-                        resultSet.getString(5)
-                );
-                operationList.add(operation);
-            }
-            assertEquals(operationList, operationRepository.getAllOperationsByStatus("UNAPPROVED"));
-            operation1.close();
-            operation2.close();
-            getAllOperation.close();
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertNull(operationRepository.getAllOperationsByStatus("UNAPPROVED"));
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void changeOperationStatus() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            operationRepository.setUrl(url);
-            PreparedStatement operation1 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
-            operation1.execute();
-            assertTrue(operationRepository.changeOperationStatus(1, "APPROVED"));
-            operation1.close();
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertFalse(operationRepository.changeOperationStatus(1, "APPROVED"));
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void getOperationById() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            operationRepository.setUrl(url);
-            PreparedStatement operation1 =
-                    connection.prepareStatement(
-                            "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
-            operation1.execute();
-            PreparedStatement getOperation = connection.prepareStatement("SELECT * FROM OPERATIONS WHERE ID = 1");
-            resultSet = getOperation.executeQuery();
-            resultSet.next();
+    public void getAllOperationByBill() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        operationRepository.setUrl(url);
+        PreparedStatement operation1 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
+        PreparedStatement operation2 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 2, 200 )");
+        operation1.execute();
+        operation2.execute();
+        PreparedStatement getAllOperation =
+                connection.prepareStatement("SELECT * FROM OPERATIONS WHERE SOURCE = 1");
+        resultSet = getAllOperation.executeQuery();
+        List<Operation> operationList = new ArrayList<>();
+        while (resultSet.next()) {
             Operation operation = new Operation(
                     resultSet.getLong(1),
                     resultSet.getLong(2),
                     resultSet.getLong(3),
                     resultSet.getDouble(4),
-                    resultSet.getString(5));
-
-            assertEquals(Optional.of(operation), operationRepository.getOperationById(1));
-            operation1.close();
-            getOperation.close();
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertEquals(Optional.empty(), operationRepository.getOperationById(1));
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
+                    resultSet.getString(5)
+            );
+            operationList.add(operation);
         }
+        assertEquals(operationList, operationRepository.getAllOperationByBill(1));
+        operation1.close();
+        operation2.close();
+        getAllOperation.close();
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertNull(operationRepository.getAllOperationByBill(1));
+        connection.close();
+    }
+
+    @Test
+    public void getAllOperation() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        operationRepository.setUrl(url);
+        PreparedStatement operation1 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
+        PreparedStatement operation2 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 2, 2, 200 )");
+        operation1.execute();
+        operation2.execute();
+        PreparedStatement getAllOperation = connection.prepareStatement("SELECT * FROM OPERATIONS");
+        resultSet = getAllOperation.executeQuery();
+        List<Operation> operationList = new ArrayList<>();
+        while (resultSet.next()) {
+            Operation operation = new Operation(
+                    resultSet.getLong(1),
+                    resultSet.getLong(2),
+                    resultSet.getLong(3),
+                    resultSet.getDouble(4),
+                    resultSet.getString(5)
+            );
+            operationList.add(operation);
+        }
+        assertEquals(operationList, operationRepository.getAllOperation());
+        operation1.close();
+        operation2.close();
+        getAllOperation.close();
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertNull(operationRepository.getAllOperation());
+        connection.close();
+    }
+
+    @Test
+    public void getAllOperationsByStatus() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        operationRepository.setUrl(url);
+        PreparedStatement operation1 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
+        PreparedStatement operation2 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 2, 2, 200 )");
+        operation1.execute();
+        operation2.execute();
+        PreparedStatement getAllOperation =
+                connection.prepareStatement("SELECT * FROM OPERATIONS WHERE STATUS = 'UNAPPROVED'");
+        resultSet = getAllOperation.executeQuery();
+        List<Operation> operationList = new ArrayList<>();
+        while (resultSet.next()) {
+            Operation operation = new Operation(
+                    resultSet.getLong(1),
+                    resultSet.getLong(2),
+                    resultSet.getLong(3),
+                    resultSet.getDouble(4),
+                    resultSet.getString(5)
+            );
+            operationList.add(operation);
+        }
+        assertEquals(operationList, operationRepository.getAllOperationsByStatus("UNAPPROVED"));
+        operation1.close();
+        operation2.close();
+        getAllOperation.close();
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertNull(operationRepository.getAllOperationsByStatus("UNAPPROVED"));
+        connection.close();
+    }
+
+    @Test
+    public void changeOperationStatus() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        operationRepository.setUrl(url);
+        PreparedStatement operation1 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
+        operation1.execute();
+        assertTrue(operationRepository.changeOperationStatus(1, "APPROVED"));
+        operation1.close();
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertFalse(operationRepository.changeOperationStatus(1, "APPROVED"));
+        connection.close();
+    }
+
+    @Test
+    public void getOperationById() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        operationRepository.setUrl(url);
+        PreparedStatement operation1 =
+                connection.prepareStatement(
+                        "INSERT INTO OPERATIONS (SOURCE, TARGET, SUM)  VALUES ( 1, 1, 100 )");
+        operation1.execute();
+        PreparedStatement getOperation = connection.prepareStatement("SELECT * FROM OPERATIONS WHERE ID = 1");
+        resultSet = getOperation.executeQuery();
+        resultSet.next();
+        Operation operation = new Operation(
+                resultSet.getLong(1),
+                resultSet.getLong(2),
+                resultSet.getLong(3),
+                resultSet.getDouble(4),
+                resultSet.getString(5));
+
+        assertEquals(Optional.of(operation), operationRepository.getOperationById(1));
+        operation1.close();
+        getOperation.close();
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertEquals(Optional.empty(), operationRepository.getOperationById(1));
+        connection.close();
     }
 }

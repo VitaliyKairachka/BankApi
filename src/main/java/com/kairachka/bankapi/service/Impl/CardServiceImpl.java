@@ -22,14 +22,16 @@ import java.util.Optional;
 
 public class CardServiceImpl implements CardService {
     private CardRepository cardRepository = new CardRepositoryImpl();
-    private final UserService userService = new UserServiceImpl();
-    private final BillService billService = new BillServiceImpl();
+    private UserService userService = new UserServiceImpl();
+    private BillService billService = new BillServiceImpl();
 
     public CardServiceImpl() {
     }
 
-    public CardServiceImpl(CardRepository cardRepository) {
+    public CardServiceImpl(CardRepository cardRepository, UserService userService, BillService billService) {
         this.cardRepository = cardRepository;
+        this.userService = userService;
+        this.billService = billService;
     }
 
     @Override
@@ -40,17 +42,12 @@ public class CardServiceImpl implements CardService {
             if (user.getId() == bill.getUserId()) {
                 String date = DateTimeFormatter.ofPattern("MM/yy", Locale.ENGLISH)
                         .format(LocalDate.now().plusYears(2));
-                Card card = new Card(
-                        date,
-                        user.getFirstName(),
-                        user.getLastName(),
-                        billId);
+                Card card = new Card(date, user.getFirstName(), user.getLastName(), billId);
                 return cardRepository.addCard(card);
             } else {
                 return false;
             }
         } catch (BillNotFoundException e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -59,9 +56,9 @@ public class CardServiceImpl implements CardService {
     public Card getCardById(long id, String login)
             throws BillNotFoundException, CardNotFoundException, NoAccessException, UserNotFoundException {
         Optional<Card> card = cardRepository.getCardById(id);
+        User user = userService.getUserByLogin(login);
         if (card.isPresent()) {
             Bill bill = billService.getBillById(card.get().getBillId());
-            User user = userService.getUserByLogin(login);
             if (user.getId() == bill.getUserId()) {
                 return card.get();
             } else {
@@ -99,9 +96,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public boolean changeCardStatus(long id, String status) {
-        if (status.toUpperCase().equals(CardStatus.NOT_ACTIVE.toString())) {
+        if (status.toUpperCase().equals(CardStatus.ACTIVE.toString())) {
             return cardRepository.changeCardStatus(id, status.toUpperCase());
-        } else if (status.toUpperCase().equals(CardStatus.ACTIVE.toString())) {
+        } else if (status.toUpperCase().equals(CardStatus.NOT_ACTIVE.toString())) {
             return false;
         } else {
             return false;

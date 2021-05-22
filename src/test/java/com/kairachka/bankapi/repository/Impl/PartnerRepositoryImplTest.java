@@ -21,56 +21,48 @@ public class PartnerRepositoryImplTest {
 
 
     @Test
-    public void addPartner() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            partnerRepository.setUrl(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            Partner partner = new Partner();
-            partner.setPartnerBill(2000000000000000001L);
-            assertTrue(partnerRepository.addPartner(partner));
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertFalse(partnerRepository.addPartner(new Partner()));
-            connection.close();
-        } catch (FileNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+    public void addPartner() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        partnerRepository.setUrl(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        Partner partner = new Partner();
+        partner.setPartnerBill(2000000000000000001L);
+        assertTrue(partnerRepository.addPartner(partner));
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertFalse(partnerRepository.addPartner(new Partner()));
+        connection.close();
     }
 
     @Test
-    public void getAllPartners() {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            RunScript.execute(connection, new FileReader(createTable));
-            partnerRepository.setUrl(url);
-            PreparedStatement partner1 =
-                    connection.prepareStatement(
-                            "INSERT INTO PARTNERS (NAME, PARTNER_BILL) VALUES ( 'V', 2000000000000000001 )");
-            PreparedStatement partner2 =
-                    connection.prepareStatement(
-                            "INSERT INTO PARTNERS (NAME, PARTNER_BILL) VALUES ( 'K', 2000000000000000002 )");
-            partner1.execute();
-            partner2.execute();
-            PreparedStatement getAllPartners = connection.prepareStatement("SELECT * FROM PARTNERS");
-            ResultSet resultSet = getAllPartners.executeQuery();
-            List<Partner> partnerList = new ArrayList<>();
-            while (resultSet.next()) {
-                Partner partner = new Partner(
-                        resultSet.getLong(1),
-                        resultSet.getString(2),
-                        resultSet.getLong(3)
-                );
-                partnerList.add(partner);
-            }
-            assertEquals(partnerList, partnerRepository.getAllPartners());
-            partner1.close();
-            partner2.close();
-            getAllPartners.close();
-            RunScript.execute(connection, new FileReader(deleteTable));
-            assertNull(partnerRepository.getAllPartners());
-            connection.close();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
+    public void getAllPartners() throws SQLException, FileNotFoundException {
+        Connection connection = DriverManager.getConnection(url);
+        RunScript.execute(connection, new FileReader(createTable));
+        partnerRepository.setUrl(url);
+        PreparedStatement partner1 =
+                connection.prepareStatement(
+                        "INSERT INTO PARTNERS (NAME, PARTNER_BILL) VALUES ( 'V', 2000000000000000001 )");
+        PreparedStatement partner2 =
+                connection.prepareStatement(
+                        "INSERT INTO PARTNERS (NAME, PARTNER_BILL) VALUES ( 'K', 2000000000000000002 )");
+        partner1.execute();
+        partner2.execute();
+        PreparedStatement getAllPartners = connection.prepareStatement("SELECT * FROM PARTNERS");
+        ResultSet resultSet = getAllPartners.executeQuery();
+        List<Partner> partnerList = new ArrayList<>();
+        while (resultSet.next()) {
+            Partner partner = new Partner(
+                    resultSet.getLong(1),
+                    resultSet.getString(2),
+                    resultSet.getLong(3)
+            );
+            partnerList.add(partner);
         }
+        assertEquals(partnerList, partnerRepository.getAllPartners());
+        partner1.close();
+        partner2.close();
+        getAllPartners.close();
+        RunScript.execute(connection, new FileReader(deleteTable));
+        assertNull(partnerRepository.getAllPartners());
+        connection.close();
     }
 }

@@ -19,14 +19,16 @@ import java.util.List;
 public class ReplenishmentServiceImpl implements ReplenishmentService {
     private ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
     private final ReplenishmentMapper replenishmentMapper = new ReplenishmentMapper();
-    private final BillService billService = new BillServiceImpl();
-    private final UserService userService = new UserServiceImpl();
+    private BillService billService = new BillServiceImpl();
+    private UserService userService = new UserServiceImpl();
 
     public ReplenishmentServiceImpl() {
     }
 
-    public ReplenishmentServiceImpl(ReplenishmentRepository replenishmentRepository) {
+    public ReplenishmentServiceImpl(ReplenishmentRepository replenishmentRepository, BillService billService, UserService userService) {
         this.replenishmentRepository = replenishmentRepository;
+        this.billService = billService;
+        this.userService = userService;
     }
 
     @Override

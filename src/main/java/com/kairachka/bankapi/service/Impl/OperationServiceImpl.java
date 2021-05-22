@@ -22,14 +22,16 @@ import java.util.Optional;
 public class OperationServiceImpl implements OperationService {
     private OperationRepository operationRepository = new OperationRepositoryImpl();
     private final OperationMapper operationMapper = new OperationMapper();
-    private final BillService billService = new BillServiceImpl();
-    private final UserService userService = new UserServiceImpl();
+    private BillService billService = new BillServiceImpl();
+    private UserService userService = new UserServiceImpl();
 
     public OperationServiceImpl() {
     }
 
-    public OperationServiceImpl(OperationRepository operationRepository) {
+    public OperationServiceImpl(OperationRepository operationRepository, BillService billService, UserService userService) {
         this.operationRepository = operationRepository;
+        this.billService = billService;
+        this.userService = userService;
     }
 
     @Override
