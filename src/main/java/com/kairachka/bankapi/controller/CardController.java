@@ -21,10 +21,18 @@ import java.util.List;
 import java.util.Map;
 
 public class CardController implements HttpHandler {
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
-    private final CardServiceImpl cardServiceImpl = new CardServiceImpl();
+    private UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private CardServiceImpl cardServiceImpl = new CardServiceImpl();
     private final CardMapper cardMapper = new CardMapper();
     private final Logger logger = LoggerFactory.getLogger(CardController.class);
+
+    public CardController() {
+    }
+
+    public CardController(UserServiceImpl userServiceImpl, CardServiceImpl cardServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+        this.cardServiceImpl = cardServiceImpl;
+    }
 
     @Override
     public void handle(HttpExchange exchange) {

@@ -1,6 +1,5 @@
 package com.kairachka.bankapi.controller;
 
-import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.service.Impl.UserServiceImpl;
@@ -14,8 +13,15 @@ import java.io.IOException;
 import java.util.Map;
 
 public class UserController implements HttpHandler {
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    public UserController() {
+    }
+
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Override
     public void handle(HttpExchange exchange) {
