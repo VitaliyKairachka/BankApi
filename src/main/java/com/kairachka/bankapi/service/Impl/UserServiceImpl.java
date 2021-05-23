@@ -3,18 +3,15 @@ package com.kairachka.bankapi.service.Impl;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
-import com.kairachka.bankapi.mapper.UserMapper;
 import com.kairachka.bankapi.repository.Impl.UserRepositoryImpl;
 import com.kairachka.bankapi.repository.UserRepository;
 import com.kairachka.bankapi.service.UserService;
 import com.kairachka.bankapi.util.PasswordEncryption;
-import com.sun.net.httpserver.HttpExchange;
 
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository = new UserRepositoryImpl();
-    private final UserMapper userMapper = new UserMapper();
 
     public UserServiceImpl() {
     }
@@ -24,8 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUser(HttpExchange exchange) {
-        User user = userMapper.JsonToUser(exchange);
+    public boolean addUser(User user) {
         user.setPassword(PasswordEncryption.hashedPassword(user.getPassword()));
         if (user.getRole() == null) {
             user.setRole(Role.USER);

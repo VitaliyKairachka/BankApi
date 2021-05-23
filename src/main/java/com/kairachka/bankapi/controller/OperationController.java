@@ -84,7 +84,8 @@ public class OperationController implements HttpHandler {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {
                         try {
-                            if (operationServiceImpl.addOperation(exchange)) {
+                            Operation operation = operationMapper.JsonToOperation(exchange);
+                            if (operationServiceImpl.addOperation(operation)) {
                                 exchange.sendResponseHeaders(201, -1);
                             } else {
                                 exchange.sendResponseHeaders(406, -1);

@@ -53,7 +53,8 @@ public class PartnerController implements HttpHandler {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {
-                        if (partnerServiceImpl.addPartner(exchange)) {
+                        Partner partner = partnerMapper.JsonToPartner(exchange);
+                        if (partnerServiceImpl.addPartner(partner)) {
                             exchange.sendResponseHeaders(201, -1);
                         } else {
                             exchange.sendResponseHeaders(201, -1);

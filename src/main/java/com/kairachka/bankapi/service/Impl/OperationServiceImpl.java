@@ -35,8 +35,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public boolean addOperation(HttpExchange exchange) throws BillNotFoundException {
-        Operation operation = operationMapper.JsonToOperation(exchange);
+    public boolean addOperation(Operation operation) throws BillNotFoundException {
         Bill bill = billService.getBillById(operation.getSourceId());
         if (bill.getBalance() - operation.getSum() >= 0 && bill.getBalance() > 0) {
             if (operationRepository.addOperation(operation)) {

@@ -14,7 +14,7 @@ public interface UserService {
      * @param exchange
      * @return
      */
-    boolean addUser(HttpExchange exchange);
+    boolean addUser(User user);
 
     /**
      *

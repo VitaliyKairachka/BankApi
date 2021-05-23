@@ -31,14 +31,4 @@ public class PropertiesManager {
         }
         return -1;
     }
-
-    public String getRealm() {
-        try (FileInputStream fileInputStream = new FileInputStream(property)) {
-            properties.load(fileInputStream);
-            return properties.getProperty("authenticator.realm");
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return null;
-    }
 }

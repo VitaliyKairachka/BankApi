@@ -19,7 +19,7 @@ public interface OperationService {
      * @return
      * @throws BillNotFoundException
      */
-    boolean addOperation(HttpExchange exchange) throws BillNotFoundException;
+    boolean addOperation(Operation operation) throws BillNotFoundException;
 
     /**
      *

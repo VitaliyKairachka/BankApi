@@ -17,7 +17,7 @@ public interface ReplenishmentService {
      * @param exchange
      * @return
      */
-    boolean addReplenishment(HttpExchange exchange);
+    boolean addReplenishment(Replenishment replenishment);
 
     /**
      *

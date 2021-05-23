@@ -22,8 +22,7 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
-    public boolean addPartner(HttpExchange exchange) {
-        Partner partner = partnerMapper.JsonToPartner(exchange);
+    public boolean addPartner(Partner partner) {
         return partnerRepository.addPartner(partner);
     }
 

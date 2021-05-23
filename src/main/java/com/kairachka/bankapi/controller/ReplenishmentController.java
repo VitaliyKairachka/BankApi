@@ -61,7 +61,8 @@ public class ReplenishmentController implements HttpHandler {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {
-                        if (replenishmentServiceImpl.addReplenishment(exchange)) {
+                        Replenishment replenishment = replenishmentMapper.JsonToReplenishment(exchange);
+                        if (replenishmentServiceImpl.addReplenishment(replenishment)) {
                             exchange.sendResponseHeaders(201, -1);
                         } else {
                             exchange.sendResponseHeaders(406, -1);

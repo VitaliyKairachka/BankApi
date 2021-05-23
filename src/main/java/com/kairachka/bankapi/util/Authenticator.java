@@ -4,10 +4,15 @@ import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.sun.net.httpserver.BasicAuthenticator;
 
 public class Authenticator extends BasicAuthenticator {
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private UserServiceImpl userServiceImpl = new UserServiceImpl();
 
-    public Authenticator(String realm) {
-        super(realm);
+    public Authenticator() {
+        super("realm");
+    }
+
+    public Authenticator(UserServiceImpl userServiceImpl) {
+        super("realm");
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Override

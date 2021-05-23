@@ -1,8 +1,11 @@
 package com.kairachka.bankapi.controller;
 
+import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
+import com.kairachka.bankapi.mapper.UserMapper;
 import com.kairachka.bankapi.service.Impl.UserServiceImpl;
+import com.kairachka.bankapi.service.UserService;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -13,8 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 
 public class UserController implements HttpHandler {
-    private UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private UserService userServiceImpl = new UserServiceImpl();
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final UserMapper userMapper = new UserMapper();
 
     public UserController() {
     }
@@ -30,7 +34,8 @@ public class UserController implements HttpHandler {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {
-                        if (userServiceImpl.addUser(exchange)) {
+                        User user = userMapper.JsonToUser(exchange);
+                        if (userServiceImpl.addUser(user)) {
                             exchange.sendResponseHeaders(201, -1);
                             exchange.close();
                         } else {
@@ -48,8 +53,11 @@ public class UserController implements HttpHandler {
             exchange.close();
         } catch (IOException e) {
             logger.error(e.getMessage());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         } catch (UserNotFoundException e) {
             logger.info(e.getMessage());
         }
     }
 }
+

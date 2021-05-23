@@ -32,8 +32,7 @@ public class ReplenishmentServiceImpl implements ReplenishmentService {
     }
 
     @Override
-    public boolean addReplenishment(HttpExchange exchange) {
-        Replenishment replenishment = replenishmentMapper.JsonToReplenishment(exchange);
+    public boolean addReplenishment(Replenishment replenishment) {
         if (replenishment.getSum() > 0) {
             if (billService.plusBalance(replenishment.getBillId(), replenishment.getSum())) {
                 return replenishmentRepository.addReplenishment(replenishment);

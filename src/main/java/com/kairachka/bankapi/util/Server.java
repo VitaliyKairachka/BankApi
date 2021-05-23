@@ -17,7 +17,7 @@ public class Server {
         ReplenishmentController replenishmentController = new ReplenishmentController();
         PartnerController partnerController = new PartnerController();
         OperationController operationController = new OperationController();
-        Authenticator authenticator = new Authenticator(propertiesManager.getRealm());
+        Authenticator authenticator = new Authenticator();
         Logger logger = LoggerFactory.getLogger(Server.class);
 
         int serverPort = propertiesManager.getPort();

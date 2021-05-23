@@ -15,7 +15,7 @@ public interface PartnerService {
      * @param exchange
      * @return
      */
-    boolean addPartner(HttpExchange exchange);
+    boolean addPartner(Partner partner);
 
     /**
      *
