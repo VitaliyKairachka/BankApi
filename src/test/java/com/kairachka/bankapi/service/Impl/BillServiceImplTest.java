@@ -59,7 +59,8 @@ public class BillServiceImplTest {
     }
 
     @Test
-    public void getBillByIdAndLoginCorrectAndAccess() throws UserNotFoundException, BillNotFoundException, NoAccessException {
+    public void getBillByIdAndLoginCorrectAndAccess()
+            throws UserNotFoundException, BillNotFoundException, NoAccessException {
         Bill bill = new Bill(1, 1, 0, 1);
         User user = new User(
                 1, "login", "p", "f", "l",

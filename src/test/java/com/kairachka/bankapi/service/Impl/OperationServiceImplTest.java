@@ -76,7 +76,8 @@ class OperationServiceImplTest {
     }
 
     @Test
-    void getAllOperationsByBillId() throws BillNotFoundException, UserNotFoundException, OperationNotFoundException, NoAccessException {
+    void getAllOperationsByBillId()
+            throws BillNotFoundException, UserNotFoundException, OperationNotFoundException, NoAccessException {
         Bill bill = new Bill(1, 1, 0, 1);
         User user = new User(
                 1, "login", "p", "f", "l",

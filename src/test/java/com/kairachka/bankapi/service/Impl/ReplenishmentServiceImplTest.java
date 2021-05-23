@@ -81,7 +81,7 @@ class ReplenishmentServiceImplTest {
     }
 
     @Test
-    void getAllReplenishmentByBillNoAccess() throws BillNotFoundException, UserNotFoundException, NoAccessException {
+    void getAllReplenishmentByBillNoAccess() throws BillNotFoundException, UserNotFoundException {
         Bill bill = new Bill(1, 1, 0, 2);
         User user = new User(
                 1, "login", "p", "f", "l",

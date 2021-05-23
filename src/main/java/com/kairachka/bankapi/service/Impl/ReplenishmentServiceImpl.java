@@ -6,7 +6,6 @@ import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.NoAccessException;
 import com.kairachka.bankapi.exception.UserNotFoundException;
-import com.kairachka.bankapi.mapper.ReplenishmentMapper;
 import com.kairachka.bankapi.repository.Impl.ReplenishmentRepositoryImpl;
 import com.kairachka.bankapi.repository.ReplenishmentRepository;
 import com.kairachka.bankapi.service.BillService;
@@ -17,7 +16,6 @@ import java.util.List;
 
 public class ReplenishmentServiceImpl implements ReplenishmentService {
     private ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
-    private final ReplenishmentMapper replenishmentMapper = new ReplenishmentMapper();
     private BillService billService = new BillServiceImpl();
     private UserService userService = new UserServiceImpl();
 

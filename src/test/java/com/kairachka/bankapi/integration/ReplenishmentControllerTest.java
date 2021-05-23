@@ -43,7 +43,8 @@ public class ReplenishmentControllerTest {
     private static final ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
     private final UserServiceImpl userService = new UserServiceImpl(userRepository);
     private final BillServiceImpl billService = new BillServiceImpl(billRepository, userService);
-    private final ReplenishmentServiceImpl replenishmentService = new ReplenishmentServiceImpl(replenishmentRepository, billService, userService);
+    private final ReplenishmentServiceImpl replenishmentService =
+            new ReplenishmentServiceImpl(replenishmentRepository, billService, userService);
     private static final String url = "jdbc:h2:mem:testIntegration;DB_CLOSE_DELAY=-1";
     private static final String createTable = "src/test/resources/SQLScripts/CreateTestTables";
     private static final String deleteTable = "src/test/resources/SQLScripts/DropTestTables";
@@ -51,7 +52,8 @@ public class ReplenishmentControllerTest {
     private static final String createUser = "src/test/resources/SQLScripts/CreateUser";
     private static final String createUser2 = "src/test/resources/SQLScripts/CreateUser2";
     private static Connection connectionDB;
-    private final ReplenishmentController replenishmentController = new ReplenishmentController(replenishmentService, userService);
+    private final ReplenishmentController replenishmentController =
+            new ReplenishmentController(replenishmentService, userService);
     private final Authenticator authenticator = new Authenticator(userService);
     private static final String admin = "Basic YWRtaW46YWRtaW4=";
     private static final String user = "Basic dXNlcjphZG1pbg==";

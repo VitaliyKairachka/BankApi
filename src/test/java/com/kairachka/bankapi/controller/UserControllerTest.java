@@ -55,7 +55,8 @@ class UserControllerTest {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         connection.setDoOutput(true);
-        User user = new User("123", "123", "V", "K", "A", "123", "123", null);
+        User user = new User("123", "123", "V",
+                "K", "A", "123", "123", null);
         String jsonRequest = objectMapper.writeValueAsString(user);
         DataOutputStream out = new DataOutputStream(connection.getOutputStream());
         out.writeBytes(jsonRequest);
@@ -76,7 +77,8 @@ class UserControllerTest {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         connection.setDoOutput(true);
-        User user = new User("123", "123", "V", "K", "A", "123", "123", null);
+        User user = new User("123", "123", "V",
+                "K", "A", "123", "123", null);
         String jsonRequest = objectMapper.writeValueAsString(user);
         DataOutputStream out = new DataOutputStream(connection.getOutputStream());
         out.writeBytes(jsonRequest);
@@ -117,7 +119,8 @@ class UserControllerTest {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         connection.setDoOutput(true);
-        User user = new User("123", "123", "V", "K", "A", "123", "123", null);
+        User user = new User("123", "123", "V",
+                "K", "A", "123", "123", null);
         String jsonRequest = objectMapper.writeValueAsString(user);
         DataOutputStream out = new DataOutputStream(connection.getOutputStream());
         out.writeBytes(jsonRequest);

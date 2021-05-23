@@ -10,8 +10,9 @@ import java.util.Optional;
  */
 public interface CardRepository {
     /**
+     * Сеттер для смены ссылки на подключение к базе данных
      *
-     * @param url
+     * @param url ссылка для подключения к базе данных
      */
     void setUrl(String url);
 

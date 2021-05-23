@@ -1,10 +1,8 @@
 package com.kairachka.bankapi.service.Impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
-import com.kairachka.bankapi.mapper.UserMapper;
 import com.kairachka.bankapi.repository.Impl.UserRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceImplTest {
     @Mock
     UserRepositoryImpl userRepository = Mockito.mock(UserRepositoryImpl.class);
-    private final UserMapper userMapper = new UserMapper();
-    ObjectMapper mapper = new ObjectMapper();
     @InjectMocks
     UserServiceImpl userService;
 
@@ -60,9 +56,6 @@ class UserServiceImplTest {
 
     @Test
     void authentication() {
-        User user = new User(
-                1, "login", "p", "f", "l",
-                "m", "pa", "mb", Role.USER);
         assertFalse(userService.authentication("login", "123"));
     }
 

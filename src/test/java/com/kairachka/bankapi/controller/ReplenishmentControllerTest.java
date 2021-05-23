@@ -65,7 +65,8 @@ class ReplenishmentControllerTest {
         replenishmentList.add(new Replenishment());
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(), Mockito.anyString())).thenReturn(replenishmentList);
+        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(),
+                Mockito.anyString())).thenReturn(replenishmentList);
         assertEquals(connection.getResponseCode(), 200);
     }
 
@@ -77,7 +78,8 @@ class ReplenishmentControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(), Mockito.anyString())).thenThrow(BillNotFoundException.class);
+        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(BillNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
@@ -89,7 +91,8 @@ class ReplenishmentControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(), Mockito.anyString())).thenThrow(UserNotFoundException.class);
+        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(UserNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
@@ -101,7 +104,8 @@ class ReplenishmentControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(), Mockito.anyString())).thenThrow(NoAccessException.class);
+        Mockito.when(replenishmentService.getAllReplenishmentByBill(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(NoAccessException.class);
         assertEquals(connection.getResponseCode(), 403);
     }
 

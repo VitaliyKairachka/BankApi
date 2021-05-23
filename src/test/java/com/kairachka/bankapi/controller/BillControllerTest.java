@@ -88,7 +88,8 @@ class BillControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(billService.getBillByIdAndLogin(Mockito.anyLong(), Mockito.anyString())).thenThrow(NoAccessException.class);
+        Mockito.when(billService.getBillByIdAndLogin(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(NoAccessException.class);
         assertEquals(connection.getResponseCode(), 403);
     }
 
@@ -100,7 +101,8 @@ class BillControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(billService.getBillByIdAndLogin(Mockito.anyLong(), Mockito.anyString())).thenThrow(BillNotFoundException.class);
+        Mockito.when(billService.getBillByIdAndLogin(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(BillNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
@@ -117,19 +119,22 @@ class BillControllerTest {
     }
 
     @Test
-    void handleGetBillIdBillNotFound() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException {
+    void handleGetBillIdBillNotFound()
+            throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException {
         URL url = new URL("http://localhost:" + port + "/api/test/bill?billId=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(billService.getBalance(Mockito.anyLong(), Mockito.anyString())).thenThrow(BillNotFoundException.class);
+        Mockito.when(billService.getBalance(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(BillNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
     @Test
-    void handleGetBillIdBillNoAccess() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException {
+    void handleGetBillIdBillNoAccess()
+            throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException {
         URL url = new URL("http://localhost:" + port + "/api/test/bill?billId=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");

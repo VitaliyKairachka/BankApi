@@ -8,7 +8,6 @@ import com.kairachka.bankapi.exception.BillNotFoundException;
 import com.kairachka.bankapi.exception.NoAccessException;
 import com.kairachka.bankapi.exception.OperationNotFoundException;
 import com.kairachka.bankapi.exception.UserNotFoundException;
-import com.kairachka.bankapi.mapper.OperationMapper;
 import com.kairachka.bankapi.repository.Impl.OperationRepositoryImpl;
 import com.kairachka.bankapi.repository.OperationRepository;
 import com.kairachka.bankapi.service.BillService;
@@ -20,7 +19,6 @@ import java.util.Optional;
 
 public class OperationServiceImpl implements OperationService {
     private OperationRepository operationRepository = new OperationRepositoryImpl();
-    private final OperationMapper operationMapper = new OperationMapper();
     private BillService billService = new BillServiceImpl();
     private UserService userService = new UserServiceImpl();
 

@@ -5,45 +5,50 @@ import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
 
 /**
- *
+ * Слой для получения данных из репозитория и отправки на контроллер
  */
 public interface UserService {
     /**
+     * Запрос к репозиторию для создания нового пользователя
      *
-     * @param exchange
-     * @return
+     * @param user данные пользователя
+     * @return возвращает true - при создании, false - при ошибке
      */
     boolean addUser(User user);
 
     /**
+     * Запрос к репозиторию для получения пользователя по параметру
      *
-     * @param login
-     * @return
-     * @throws UserNotFoundException
+     * @param login данные пользователя
+     * @return возвращает пользователя
+     * @throws UserNotFoundException если пользователя нет
      */
     long getUserIdByLogin(String login) throws UserNotFoundException;
 
     /**
+     * Запрос к репозиторию для аутентификации
      *
-     * @param login
-     * @param password
-     * @return
+     * @param login данные пользователя
+     * @param password данные пользователя
+     * @return true - если аутентификация прошла, false - если аутентификации не прошла
      */
     boolean authentication(String login, String password);
 
     /**
+     * Запрос к репозиторию для получения роли пользователя
      *
-     * @param login
-     * @return
-     * @throws UserNotFoundException
+     * @param login данные пользователя
+     * @return роль пользовтеля
+     * @throws UserNotFoundException если пользователя нет
      */
     Role getRoleByLogin(String login) throws UserNotFoundException;
 
     /**
+     * Запрос к репозиторию для получения пользователя по логину
      *
-     * @param login
-     * @return
-     * @throws UserNotFoundException
+     * @param login данные пользователя
+     * @return возвращает пользователя
+     * @throws UserNotFoundException если пользователя нет
      */
     User getUserByLogin(String login) throws UserNotFoundException;
 }

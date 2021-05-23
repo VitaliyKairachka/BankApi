@@ -91,24 +91,28 @@ class CardControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(cardService.getAllCardsByBill(Mockito.anyLong(), Mockito.anyString())).thenThrow(NoAccessException.class);
+        Mockito.when(cardService.getAllCardsByBill(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(NoAccessException.class);
         assertEquals(connection.getResponseCode(), 403);
     }
 
     @Test
-    void handleUserGetBillIdBillNotFound() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException {
+    void handleUserGetBillIdBillNotFound()
+            throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException {
         URL url = new URL("http://localhost:" + port + "/api/test/card?billId=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(cardService.getAllCardsByBill(Mockito.anyLong(), Mockito.anyString())).thenThrow(BillNotFoundException.class);
+        Mockito.when(cardService.getAllCardsByBill(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(BillNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
     @Test
-    void handleUserGetId200() throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
+    void handleUserGetId200()
+            throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
         URL url = new URL("http://localhost:" + port + "/api/test/card?id=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
@@ -120,38 +124,44 @@ class CardControllerTest {
     }
 
     @Test
-    void handleUserGetIdCardNotFound() throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
+    void handleUserGetIdCardNotFound()
+            throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
         URL url = new URL("http://localhost:" + port + "/api/test/card?id=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(cardService.getCardById(Mockito.anyLong(), Mockito.anyString())).thenThrow(CardNotFoundException.class);
+        Mockito.when(cardService.getCardById(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(CardNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
     @Test
-    void handleUserGetIdBillNotFound() throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
+    void handleUserGetIdBillNotFound()
+            throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
         URL url = new URL("http://localhost:" + port + "/api/test/card?id=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(cardService.getCardById(Mockito.anyLong(), Mockito.anyString())).thenThrow(BillNotFoundException.class);
+        Mockito.when(cardService.getCardById(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(BillNotFoundException.class);
         assertEquals(connection.getResponseCode(), 404);
     }
 
     @Test
-    void handleUserGetIdNoAccess() throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
+    void handleUserGetIdNoAccess()
+            throws IOException, UserNotFoundException, BillNotFoundException, CardNotFoundException, NoAccessException {
         URL url = new URL("http://localhost:" + port + "/api/test/card?id=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        Mockito.when(cardService.getCardById(Mockito.anyLong(), Mockito.anyString())).thenThrow(NoAccessException.class);
+        Mockito.when(cardService.getCardById(Mockito.anyLong(),
+                Mockito.anyString())).thenThrow(NoAccessException.class);
         assertEquals(connection.getResponseCode(), 403);
     }
 

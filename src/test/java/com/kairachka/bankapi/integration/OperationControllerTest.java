@@ -3,7 +3,6 @@ package com.kairachka.bankapi.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kairachka.bankapi.controller.OperationController;
 import com.kairachka.bankapi.entity.Operation;
-import com.kairachka.bankapi.exception.OperationNotFoundException;
 import com.kairachka.bankapi.repository.BillRepository;
 import com.kairachka.bankapi.repository.Impl.BillRepositoryImpl;
 import com.kairachka.bankapi.repository.Impl.OperationRepositoryImpl;
@@ -44,7 +43,8 @@ public class OperationControllerTest {
     private static final OperationRepository operationRepository = new OperationRepositoryImpl();
     private final UserServiceImpl userService = new UserServiceImpl(userRepository);
     private final BillServiceImpl billService = new BillServiceImpl(billRepository, userService);
-    private final OperationServiceImpl operationService = new OperationServiceImpl(operationRepository, billService, userService);
+    private final OperationServiceImpl operationService =
+            new OperationServiceImpl(operationRepository, billService, userService);
     private static final String url = "jdbc:h2:mem:testIntegration;DB_CLOSE_DELAY=-1";
     private static final String createTable = "src/test/resources/SQLScripts/CreateTestTables";
     private static final String deleteTable = "src/test/resources/SQLScripts/DropTestTables";
@@ -196,7 +196,8 @@ public class OperationControllerTest {
 
     @Test
     void handlePost201() throws IOException, SQLException {
-        PreparedStatement addBill = connectionDB.prepareStatement("INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
+        PreparedStatement addBill = connectionDB.prepareStatement(
+                "INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
         addBill.execute();
         PreparedStatement partner =
                 connectionDB.prepareStatement(
@@ -220,7 +221,8 @@ public class OperationControllerTest {
 
     @Test
     void handlePost406() throws IOException, SQLException {
-        PreparedStatement addBill = connectionDB.prepareStatement("INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
+        PreparedStatement addBill = connectionDB.prepareStatement(
+                "INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
         addBill.execute();
         PreparedStatement partner =
                 connectionDB.prepareStatement(
@@ -301,7 +303,8 @@ public class OperationControllerTest {
 
     @Test
     void handlePUT200() throws IOException, SQLException {
-        PreparedStatement addBill = connectionDB.prepareStatement("INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
+        PreparedStatement addBill = connectionDB.prepareStatement(
+                "INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
         addBill.execute();
         PreparedStatement partner =
                 connectionDB.prepareStatement(
@@ -320,7 +323,8 @@ public class OperationControllerTest {
 
     @Test
     void handlePUT406() throws IOException, SQLException {
-        PreparedStatement addBill = connectionDB.prepareStatement("INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
+        PreparedStatement addBill = connectionDB.prepareStatement(
+                "INSERT INTO BILLS(USER_ID, BALANCE) VALUES (2, 1000)");
         addBill.execute();
         PreparedStatement partner =
                 connectionDB.prepareStatement(
@@ -338,7 +342,7 @@ public class OperationControllerTest {
     }
 
     @Test
-    void handlePUTOperationNotFound() throws IOException, OperationNotFoundException {
+    void handlePUTOperationNotFound() throws IOException {
         URL url = new URL("http://localhost:" + port + "/api/test/operation?id=1&action=1");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
