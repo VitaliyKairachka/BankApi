@@ -51,10 +51,8 @@ public class UserController implements HttpHandler {
                 exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             logger.error(e.getMessage());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         } catch (UserNotFoundException e) {
             logger.info(e.getMessage());
         }

@@ -30,7 +30,6 @@ public class BillRepositoryImplTest {
         RunScript.execute(connection, new FileReader(deleteTable));
         assertFalse(billRepository.addBill(1));
         connection.close();
-
     }
 
     @Test

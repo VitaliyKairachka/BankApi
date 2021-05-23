@@ -45,7 +45,7 @@ public class CardController implements HttpHandler {
                             List<Card> cardList = cardServiceImpl.getAllCardsByBill(
                                     Long.parseLong(requestQuery.get("billId")),
                                     exchange.getPrincipal().getUsername());
-                            if (cardList.get(0) != null) {
+                            if (!cardList.isEmpty()) {
                                 exchange.sendResponseHeaders(200,
                                         cardMapper.CardListToJson(cardList).getBytes().length);
                                 OutputStream outputStream = exchange.getResponseBody();
@@ -103,8 +103,6 @@ public class CardController implements HttpHandler {
                     } else {
                         exchange.sendResponseHeaders(404, -1);
                     }
-                } else {
-                    exchange.sendResponseHeaders(403, -1);
                 }
             } else if ("POST".equals(exchange.getRequestMethod())) {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {

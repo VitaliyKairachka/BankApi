@@ -33,6 +33,14 @@ class UserServiceImplTest {
 
     @Test
     void addUser() {
+        Mockito.when(userRepository.addUser(Mockito.any())).thenReturn(true);
+        assertTrue(userService.addUser(new User()));
+    }
+
+    @Test
+    void addUserFalse() {
+        Mockito.when(userRepository.addUser(Mockito.any())).thenReturn(false);
+        assertFalse(userService.addUser(new User()));
     }
 
     @Test

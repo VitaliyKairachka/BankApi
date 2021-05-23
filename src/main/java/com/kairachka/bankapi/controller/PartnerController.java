@@ -19,10 +19,18 @@ import java.util.List;
 import java.util.Map;
 
 public class PartnerController implements HttpHandler {
-    private final PartnerServiceImpl partnerServiceImpl = new PartnerServiceImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private  PartnerServiceImpl partnerServiceImpl = new PartnerServiceImpl();
+    private  UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final PartnerMapper partnerMapper = new PartnerMapper();
     private final Logger logger = LoggerFactory.getLogger(PartnerController.class);
+
+    public PartnerController() {
+    }
+
+    public PartnerController(PartnerServiceImpl partnerServiceImpl, UserServiceImpl userServiceImpl) {
+        this.partnerServiceImpl = partnerServiceImpl;
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Override
     public void handle(HttpExchange exchange) {
@@ -57,7 +65,7 @@ public class PartnerController implements HttpHandler {
                         if (partnerServiceImpl.addPartner(partner)) {
                             exchange.sendResponseHeaders(201, -1);
                         } else {
-                            exchange.sendResponseHeaders(201, -1);
+                            exchange.sendResponseHeaders(406, -1);
                         }
                     } else {
                         exchange.sendResponseHeaders(404, -1);

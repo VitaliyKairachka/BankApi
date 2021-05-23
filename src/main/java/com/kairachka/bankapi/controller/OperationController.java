@@ -21,10 +21,18 @@ import java.util.List;
 import java.util.Map;
 
 public class OperationController implements HttpHandler {
-    private final OperationServiceImpl operationServiceImpl = new OperationServiceImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private OperationServiceImpl operationServiceImpl = new OperationServiceImpl();
+    private UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final OperationMapper operationMapper = new OperationMapper();
     private final Logger logger = LoggerFactory.getLogger(OperationController.class);
+
+    public OperationController() {
+    }
+
+    public OperationController(OperationServiceImpl operationServiceImpl, UserServiceImpl userServiceImpl) {
+        this.operationServiceImpl = operationServiceImpl;
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Override
     public void handle(HttpExchange exchange) {
@@ -76,8 +84,6 @@ public class OperationController implements HttpHandler {
                     } else {
                         exchange.sendResponseHeaders(404, -1);
                     }
-                } else {
-                    exchange.sendResponseHeaders(403, -1);
                 }
             } else if ("POST".equals(exchange.getRequestMethod())) {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
@@ -119,8 +125,6 @@ public class OperationController implements HttpHandler {
                     } else {
                         exchange.sendResponseHeaders(404, -1);
                     }
-                } else {
-                    exchange.sendResponseHeaders(403, -1);
                 }
             } else {
                 exchange.sendResponseHeaders(405, -1);

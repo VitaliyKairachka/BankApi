@@ -17,6 +17,7 @@ public class BillMapper {
             return mapper.writeValueAsString(bill);
         } catch (JsonProcessingException e) {
             logger.info(e.getMessage());
+            System.out.println(bill);
             return null;
         }
     }

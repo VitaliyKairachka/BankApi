@@ -1,0 +1,330 @@
+package com.kairachka.bankapi.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kairachka.bankapi.entity.Operation;
+import com.kairachka.bankapi.enums.Role;
+import com.kairachka.bankapi.exception.BillNotFoundException;
+import com.kairachka.bankapi.exception.NoAccessException;
+import com.kairachka.bankapi.exception.OperationNotFoundException;
+import com.kairachka.bankapi.exception.UserNotFoundException;
+import com.kairachka.bankapi.service.Impl.OperationServiceImpl;
+import com.kairachka.bankapi.service.Impl.UserServiceImpl;
+import com.kairachka.bankapi.util.Authenticator;
+import com.sun.net.httpserver.HttpServer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class OperationControllerTest {
+    @Mock
+    private final UserServiceImpl userService = Mockito.mock(UserServiceImpl.class);
+    @Mock
+    private final OperationServiceImpl operationService = Mockito.mock(OperationServiceImpl.class);
+    @InjectMocks
+    private Authenticator authenticator;
+    @InjectMocks
+    private OperationController operationController;
+    private HttpServer server;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final int port = new InetSocketAddress((int) (Math.random() * 65535)).getPort();
+
+    @BeforeEach
+    void setUp() throws IOException {
+        MockitoAnnotations.initMocks(this);
+        server = HttpServer.create(new InetSocketAddress(port), 0);
+        assert server != null;
+        server.createContext("/api/test/operation", operationController).setAuthenticator(authenticator);
+        server.start();
+    }
+
+    @AfterEach
+    void shutDown() {
+        server.stop(0);
+    }
+
+    @Test
+    void handleGetUserBillId() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?billId=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        List<Operation> operationList = new ArrayList<>();
+        operationList.add(new Operation());
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.getAllOperationsByBillId(Mockito.anyLong(), Mockito.anyString())).thenReturn(operationList);
+        assertEquals(connection.getResponseCode(), 200);
+    }
+
+    @Test
+    void handleGetUserOperationNotFound() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?billId=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.getAllOperationsByBillId(Mockito.anyLong(), Mockito.anyString())).thenThrow(OperationNotFoundException.class);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handleGetUserBillNotFound() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?billId=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.getAllOperationsByBillId(Mockito.anyLong(), Mockito.anyString())).thenThrow(BillNotFoundException.class);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handleGetUserUserNotFound() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?billId=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.getAllOperationsByBillId(Mockito.anyLong(), Mockito.anyString())).thenThrow(UserNotFoundException.class);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handleGetUserNoAccess() throws IOException, UserNotFoundException, NoAccessException, BillNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?billId=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.getAllOperationsByBillId(Mockito.anyLong(), Mockito.anyString())).thenThrow(NoAccessException.class);
+        assertEquals(connection.getResponseCode(), 403);
+    }
+
+    @Test
+    void handleGetUserAny() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?qwe=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handleGetEmployeeEmpty() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        List<Operation> operationList = new ArrayList<>();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        Mockito.when(operationService.getAllOperations()).thenReturn(operationList);
+        assertEquals(connection.getResponseCode(), 200);
+    }
+
+    @Test
+    void handleGetEmployeeStatus() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?status=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        List<Operation> operationList = new ArrayList<>();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        Mockito.when(operationService.getAllOperationsByStatus(Mockito.anyString())).thenReturn(operationList);
+        assertEquals(connection.getResponseCode(), 200);
+    }
+
+    @Test
+    void handleGetEmployeeAny404() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?qwe=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handlePost201() throws IOException, UserNotFoundException, BillNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        connection.setDoOutput(true);
+        Operation operation = new Operation();
+        String jsonRequest = mapper.writeValueAsString(operation);
+        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+        out.writeBytes(jsonRequest);
+        out.flush();
+        out.close();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.addOperation(operation)).thenReturn(true);
+        assertEquals(connection.getResponseCode(), 201);
+    }
+
+    @Test
+    void handlePost406() throws IOException, UserNotFoundException, BillNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        connection.setDoOutput(true);
+        Operation operation = new Operation();
+        String jsonRequest = mapper.writeValueAsString(operation);
+        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+        out.writeBytes(jsonRequest);
+        out.flush();
+        out.close();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.addOperation(Mockito.any())).thenReturn(false);
+        assertEquals(connection.getResponseCode(), 406);
+    }
+
+    @Test
+    void handlePost404() throws IOException, UserNotFoundException, BillNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        connection.setDoOutput(true);
+        Operation operation = new Operation();
+        String jsonRequest = mapper.writeValueAsString(operation);
+        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+        out.writeBytes(jsonRequest);
+        out.flush();
+        out.close();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        Mockito.when(operationService.addOperation(operation)).thenThrow(BillNotFoundException.class);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handlePost403() throws IOException, UserNotFoundException, BillNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        connection.setDoOutput(true);
+        Operation operation = new Operation();
+        String jsonRequest = mapper.writeValueAsString(operation);
+        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+        out.writeBytes(jsonRequest);
+        out.flush();
+        out.close();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        assertEquals(connection.getResponseCode(), 403);
+    }
+
+    @Test
+    void handlePostAny404() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?qwe=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept-Charset", "UTF-8");
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        connection.setDoOutput(true);
+        Operation operation = new Operation();
+        String jsonRequest = mapper.writeValueAsString(operation);
+        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+        out.writeBytes(jsonRequest);
+        out.flush();
+        out.close();
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handlePUT200() throws IOException, UserNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?id=1&action=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        Mockito.when(operationService.changeStatusOperation(Mockito.anyLong(), Mockito.anyString())).thenReturn(true);
+        assertEquals(connection.getResponseCode(), 200);
+    }
+
+    @Test
+    void handlePUT406() throws IOException, UserNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?id=1&action=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        Mockito.when(operationService.changeStatusOperation(Mockito.anyLong(), Mockito.anyString())).thenReturn(false);
+        assertEquals(connection.getResponseCode(), 406);
+    }
+
+    @Test
+    void handlePUTOperationNotFound() throws IOException, UserNotFoundException, OperationNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?id=1&action=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        Mockito.when(operationService.changeStatusOperation(Mockito.anyLong(), Mockito.anyString())).thenThrow(OperationNotFoundException.class);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handlePUT404() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation?qwe=1&action=1");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        assertEquals(connection.getResponseCode(), 404);
+    }
+
+    @Test
+    void handleAny() throws IOException, UserNotFoundException {
+        URL url = new URL("http://localhost:" + port + "/api/test/operation");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("DELETE");
+        connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
+        Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
+        Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
+        assertEquals(connection.getResponseCode(), 405);
+    }
+
+}

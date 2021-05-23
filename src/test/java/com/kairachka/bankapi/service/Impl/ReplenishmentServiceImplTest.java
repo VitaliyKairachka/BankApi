@@ -1,7 +1,6 @@
 package com.kairachka.bankapi.service.Impl;
 
 import com.kairachka.bankapi.entity.Bill;
-import com.kairachka.bankapi.entity.Card;
 import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
@@ -39,6 +38,31 @@ class ReplenishmentServiceImplTest {
 
     @Test
     void addReplenishment() {
+        Replenishment replenishment = new Replenishment(100, 1);
+        Mockito.when(billService.plusBalance(Mockito.anyLong(), Mockito.anyDouble())).thenReturn(true);
+        Mockito.when(replenishmentRepository.addReplenishment(Mockito.any())).thenReturn(true);
+        assertTrue(replenishmentService.addReplenishment(replenishment));
+    }
+
+    @Test
+    void addReplenishmentFalseRepository() {
+        Replenishment replenishment = new Replenishment(100, 1);
+        Mockito.when(billService.plusBalance(Mockito.anyLong(), Mockito.anyDouble())).thenReturn(true);
+        Mockito.when(replenishmentRepository.addReplenishment(Mockito.any())).thenReturn(false);
+        assertFalse(replenishmentService.addReplenishment(replenishment));
+    }
+
+    @Test
+    void addReplenishmentFalsePlusBalance() {
+        Replenishment replenishment = new Replenishment(100, 1);
+        Mockito.when(billService.plusBalance(Mockito.anyLong(), Mockito.anyDouble())).thenReturn(false);
+        assertFalse(replenishmentService.addReplenishment(replenishment));
+    }
+
+    @Test
+    void addReplenishmentFalseGetSum() {
+        Replenishment replenishment = new Replenishment(0, 1);
+        assertFalse(replenishmentService.addReplenishment(replenishment));
     }
 
     @Test

@@ -20,10 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ReplenishmentController implements HttpHandler {
-    private final ReplenishmentServiceImpl replenishmentServiceImpl = new ReplenishmentServiceImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private ReplenishmentServiceImpl replenishmentServiceImpl = new ReplenishmentServiceImpl();
+    private UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final ReplenishmentMapper replenishmentMapper = new ReplenishmentMapper();
     private final Logger logger = LoggerFactory.getLogger(Replenishment.class);
+
+    public ReplenishmentController() {
+    }
+
+    public ReplenishmentController(ReplenishmentServiceImpl replenishmentServiceImpl, UserServiceImpl userServiceImpl) {
+        this.replenishmentServiceImpl = replenishmentServiceImpl;
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Override
     public void handle(HttpExchange exchange) {

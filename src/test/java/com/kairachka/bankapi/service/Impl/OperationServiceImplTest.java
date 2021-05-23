@@ -38,7 +38,41 @@ class OperationServiceImplTest {
     }
 
     @Test
-    void addOperation() {
+    void addOperationTrue() throws BillNotFoundException {
+        Bill bill = new Bill(1, 1, 1000, 1);
+        Operation operation = new Operation(1, 1, 100);
+        Mockito.when(billService.getBillById(Mockito.anyLong())).thenReturn(bill);
+        Mockito.when(operationRepository.addOperation(Mockito.any())).thenReturn(true);
+        Mockito.when(billService.minusBalance(Mockito.anyLong(), Mockito.anyDouble())).thenReturn(true);
+        assertTrue(operationService.addOperation(operation));
+    }
+
+    @Test
+    void addOperationFalseAddOperation() throws BillNotFoundException {
+        Bill bill = new Bill(1, 1, 1000, 1);
+        Operation operation = new Operation(1, 1, 100);
+        Mockito.when(billService.getBillById(Mockito.anyLong())).thenReturn(bill);
+        Mockito.when(operationRepository.addOperation(Mockito.any())).thenReturn(false);
+        assertFalse(operationService.addOperation(operation));
+    }
+
+    @Test
+    void addOperationFalseMinusBalance() throws BillNotFoundException {
+        Bill bill = new Bill(1, 1, 1000, 1);
+        Operation operation = new Operation(1, 1, 100);
+        Mockito.when(billService.getBillById(Mockito.anyLong())).thenReturn(bill);
+        Mockito.when(operationRepository.addOperation(Mockito.any())).thenReturn(true);
+        Mockito.when(billService.minusBalance(Mockito.anyLong(), Mockito.anyDouble())).thenReturn(false);
+        assertFalse(operationService.addOperation(operation));
+    }
+
+    @Test
+    void addOperationFalse() throws BillNotFoundException {
+        Bill bill = new Bill(1, 1, 0, 1);
+        Operation operation = new Operation(1, 1, 100);
+        Mockito.when(billService.getBillById(Mockito.anyLong())).thenReturn(bill);
+        Mockito.when(operationRepository.addOperation(Mockito.any())).thenReturn(true);
+        assertFalse(operationService.addOperation(operation));
     }
 
     @Test

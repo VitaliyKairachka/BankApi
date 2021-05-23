@@ -3,7 +3,6 @@ package com.kairachka.bankapi.service.Impl;
 import com.kairachka.bankapi.entity.Partner;
 import com.kairachka.bankapi.exception.PartnerNotFoundException;
 import com.kairachka.bankapi.repository.Impl.PartnerRepositoryImpl;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,6 +29,14 @@ class PartnerServiceImplTest {
 
     @Test
     void addPartner() {
+        Mockito.when(partnerRepository.addPartner(Mockito.any())).thenReturn(true);
+        assertTrue(partnerService.addPartner(new Partner()));
+    }
+
+    @Test
+    void addPartnerFalse() {
+        Mockito.when(partnerRepository.addPartner(Mockito.any())).thenReturn(false);
+        assertFalse(partnerService.addPartner(new Partner()));
     }
 
     @Test

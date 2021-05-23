@@ -3,7 +3,6 @@ package com.kairachka.bankapi.service;
 import com.kairachka.bankapi.entity.User;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
-import com.sun.net.httpserver.HttpExchange;
 
 /**
  *

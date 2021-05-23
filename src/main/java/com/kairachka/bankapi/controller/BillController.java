@@ -20,10 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 public class BillController implements HttpHandler {
-    private final BillServiceImpl billServiceImpl = new BillServiceImpl();
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
+    private  BillServiceImpl billServiceImpl = new BillServiceImpl();
+    private  UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final BillMapper billMapper = new BillMapper();
     private final Logger logger = LoggerFactory.getLogger(BillController.class);
+
+    public BillController() {
+    }
+
+    public BillController(BillServiceImpl billServiceImpl, UserServiceImpl userServiceImpl) {
+        this.billServiceImpl = billServiceImpl;
+        this.userServiceImpl = userServiceImpl;
+    }
 
     @Override
     public void handle(HttpExchange exchange) {
