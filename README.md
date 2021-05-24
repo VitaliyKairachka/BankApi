@@ -1,24 +1,23 @@
-#BankApi
-***
-##Краткое описание
+# BankApi
+## Краткое описание
 - Веб-сервис, реализующий логику работы клиентов с банковскими счетами
 - jar архив находится в "out/artifacts/BankApi_jar"
 - для запуска приложения из консоли прописать "java -jar BankApi.jar"
 - настройки порта и url подключения к бд нахоядтся в "src/main/resources/property/property"
 ***
-##Stack
-- ###jackson
-- ###h2database
-- ###jbcrypt
-- ###junit5
-- ###mockito
+## Stack
+- ### jackson
+- ### h2database
+- ### jbcrypt
+- ### junit5
+- ### mockito
 ***
-##Er-diagram
+## Er-diagram
 ![image](DataBaseDiagram.jpg)
 ***
-##API
+## API
 
-###/api/user
+### /api/user
 ```
 /bills                      GET             returns all user bills  
 ```
@@ -56,7 +55,7 @@
 /operations?billid=         POST            returns list of operations by bill id	
 ```
 
-###/api/employee
+### /api/employee
 ```
 /operations                 GET             returns all operations			
 ```
@@ -82,8 +81,8 @@
 /bills?id=                  POST            creates bill by user id	
 ```
 ***
-##POST JSON
-####USER
+## POST JSON
+#### USER
 ```
 {   
     "login" : "admin",
@@ -95,21 +94,21 @@
     "mobilePhone" : "89999999999"
 }
 ```
-####REPLENISHMENT
+#### REPLENISHMENT
 ```
 {
     "sum" : 100.0,
     "billId" : 1
 }
 ```
-####PARTNER
+#### PARTNER
 ```
 {
     "name" : "Igor",
     "partnerBill" : 2000000000000000001
 }
 ```
-####OPERATION
+#### OPERATION
 ```
 {
     "sourceId" : 1,
