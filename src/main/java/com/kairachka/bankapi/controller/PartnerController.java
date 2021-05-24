@@ -1,6 +1,7 @@
 package com.kairachka.bankapi.controller;
 
 import com.kairachka.bankapi.entity.Partner;
+import com.kairachka.bankapi.enums.RequestMethod;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.PartnerNotFoundException;
 import com.kairachka.bankapi.exception.UserNotFoundException;
@@ -32,7 +33,7 @@ public class PartnerController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) {
         try {
-            if ("GET".equals(exchange.getRequestMethod())) {
+            if (RequestMethod.GET.toString().equals(exchange.getRequestMethod())) {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {
@@ -54,7 +55,7 @@ public class PartnerController implements HttpHandler {
                 } else {
                     exchange.sendResponseHeaders(403, -1);
                 }
-            } else if ("POST".equals(exchange.getRequestMethod())) {
+            } else if (RequestMethod.POST.toString().equals(exchange.getRequestMethod())) {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.USER)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.kairachka.bankapi.controller;
 
 import com.kairachka.bankapi.entity.User;
+import com.kairachka.bankapi.enums.RequestMethod;
 import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.mapper.UserMapper;
@@ -27,7 +28,7 @@ public class UserController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) {
         try {
-            if ("POST".equals(exchange.getRequestMethod())) {
+            if (RequestMethod.POST.toString().equals(exchange.getRequestMethod())) {
                 if (userServiceImpl.getRoleByLogin(exchange.getPrincipal().getUsername()).equals(Role.EMPLOYEE)) {
                     Map<String, String> requestQuery = QueryParser.queryToMap(exchange.getRequestURI().getRawQuery());
                     if (requestQuery.isEmpty()) {
