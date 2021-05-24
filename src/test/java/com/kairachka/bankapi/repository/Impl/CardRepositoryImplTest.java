@@ -18,8 +18,8 @@ public class CardRepositoryImplTest {
     private final CardRepository cardRepository = new CardRepositoryImpl();
     private ResultSet resultSet;
     private static final String url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
-    private static final String createTable = "src/test/resources/SQLScripts/Card/CreateTableCard";
-    private static final String deleteTable = "src/test/resources/SQLScripts/Card/DeleteTableCard";
+    private static final String createTable = "src/test/resources/SQLScripts/Card/CreateTableCard.sql";
+    private static final String deleteTable = "src/test/resources/SQLScripts/Card/DeleteTableCard.sql";
 
     @Test
     public void addCard() throws SQLException, FileNotFoundException {

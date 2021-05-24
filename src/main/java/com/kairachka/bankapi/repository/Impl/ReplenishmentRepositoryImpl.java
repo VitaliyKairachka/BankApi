@@ -4,8 +4,6 @@ import com.kairachka.bankapi.entity.Replenishment;
 import com.kairachka.bankapi.repository.ReplenishmentRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +12,6 @@ import java.util.List;
 public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private String url = propertiesManager.getUrl();
-    private final Logger logger = LoggerFactory.getLogger(ReplenishmentRepositoryImpl.class);
 
     @Override
     public void setUrl(String url) {
@@ -30,7 +27,7 @@ public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return false;
         }
     }
@@ -53,7 +50,7 @@ public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
             }
             return replenishmentList;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return null;
         }
     }

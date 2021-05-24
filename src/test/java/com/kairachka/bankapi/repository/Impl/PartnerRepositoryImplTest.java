@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PartnerRepositoryImplTest {
     private final PartnerRepository partnerRepository = new PartnerRepositoryImpl();
     private static final String url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
-    private static final String createTable = "src/test/resources/SQLScripts/Partner/CreateTablePartner";
-    private static final String deleteTable = "src/test/resources/SQLScripts/Partner/DeleteTalbePartner";
+    private static final String createTable = "src/test/resources/SQLScripts/Partner/CreateTablePartner.sql";
+    private static final String deleteTable = "src/test/resources/SQLScripts/Partner/DeleteTalbePartner.sql";
 
 
     @Test

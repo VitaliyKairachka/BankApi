@@ -56,7 +56,7 @@ class UserControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         connection.setDoOutput(true);
         User user = new User("123", "123", "V",
-                "K", "A", "123", "123", null);
+                "K", "A", "123", "123", Role.USER);
         String jsonRequest = objectMapper.writeValueAsString(user);
         DataOutputStream out = new DataOutputStream(connection.getOutputStream());
         out.writeBytes(jsonRequest);
@@ -65,7 +65,7 @@ class UserControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
         Mockito.when(userService.addUser(Mockito.any())).thenReturn(true);
-        assertEquals(connection.getResponseCode(), 201);
+        assertEquals(201, connection.getResponseCode());
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
         Mockito.when(userService.addUser(Mockito.any())).thenReturn(false);
-        assertEquals(connection.getResponseCode(), 406);
+        assertEquals(406, connection.getResponseCode());
     }
 
     @Test
@@ -107,7 +107,7 @@ class UserControllerTest {
         out.close();
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -128,7 +128,7 @@ class UserControllerTest {
         out.close();
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -138,6 +138,6 @@ class UserControllerTest {
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
-        assertEquals(connection.getResponseCode(), 405);
+        assertEquals(405, connection.getResponseCode());
     }
 }

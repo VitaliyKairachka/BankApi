@@ -65,7 +65,7 @@ class PartnerControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(partnerService.getAllPartners()).thenReturn(partnerList);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -77,7 +77,7 @@ class PartnerControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(partnerService.getAllPartners()).thenThrow(PartnerNotFoundException.class);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -88,7 +88,7 @@ class PartnerControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -99,7 +99,7 @@ class PartnerControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -120,7 +120,7 @@ class PartnerControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(partnerService.addPartner(Mockito.any())).thenReturn(true);
-        assertEquals(connection.getResponseCode(), 201);
+        assertEquals(201, connection.getResponseCode());
     }
 
     @Test
@@ -141,7 +141,7 @@ class PartnerControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(partnerService.addPartner(Mockito.any())).thenReturn(false);
-        assertEquals(connection.getResponseCode(), 406);
+        assertEquals(406, connection.getResponseCode());
     }
 
     @Test
@@ -161,7 +161,7 @@ class PartnerControllerTest {
         out.close();
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -182,7 +182,7 @@ class PartnerControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
         Mockito.when(partnerService.addPartner(Mockito.any())).thenReturn(true);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -193,6 +193,6 @@ class PartnerControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        assertEquals(connection.getResponseCode(), 405);
+        assertEquals(405, connection.getResponseCode());
     }
 }

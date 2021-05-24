@@ -11,8 +11,6 @@ import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,7 +21,6 @@ public class BillController implements HttpHandler {
     private  BillServiceImpl billServiceImpl = new BillServiceImpl();
     private  UserServiceImpl userServiceImpl = new UserServiceImpl();
     private final BillMapper billMapper = new BillMapper();
-    private final Logger logger = LoggerFactory.getLogger(BillController.class);
 
     public BillController() {
     }
@@ -49,10 +46,10 @@ public class BillController implements HttpHandler {
                             outputStream.flush();
                             outputStream.close();
                         } catch (NoAccessException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("No access");
                             exchange.sendResponseHeaders(403, -1);
                         } catch (BillNotFoundException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("Bill not found");
                             exchange.sendResponseHeaders(404, -1);
                         }
                     } else if (requestQuery.get("billId") != null) {
@@ -66,10 +63,10 @@ public class BillController implements HttpHandler {
                             outputStream.flush();
                             outputStream.close();
                         } catch (BillNotFoundException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("Bill not found");
                             exchange.sendResponseHeaders(404, -1);
                         } catch (NoAccessException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("No access");
                             exchange.sendResponseHeaders(403, -1);
                         }
                     } else if (requestQuery.isEmpty()) {
@@ -107,9 +104,9 @@ public class BillController implements HttpHandler {
             }
             exchange.close();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.out.println("IO error");
         } catch (UserNotFoundException e) {
-            logger.info(e.getMessage());
+            System.out.println("User not found");
         }
     }
 }

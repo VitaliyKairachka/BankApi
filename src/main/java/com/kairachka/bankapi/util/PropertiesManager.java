@@ -1,33 +1,30 @@
 package com.kairachka.bankapi.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.kairachka.bankapi.BankApiApplication;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class PropertiesManager {
-    private static final String property = "src/main/resources/property/property";
+    private static final String property = "/property/property";
     private final Properties properties = new Properties();
-    private final Logger logger = LoggerFactory.getLogger(PropertiesManager.class);
 
     public String getUrl() {
-        try (FileInputStream fileInputStream = new FileInputStream(property)) {
-            properties.load(fileInputStream);
+        try {
+            properties.load(BankApiApplication.class.getResourceAsStream(property));
             return properties.getProperty("connection.url");
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.out.println("IO error");
         }
         return null;
     }
 
     public int getPort() {
-        try (FileInputStream fileInputStream = new FileInputStream(property)) {
-            properties.load(fileInputStream);
+        try {
+            properties.load(BankApiApplication.class.getResourceAsStream(property));
             return Integer.parseInt(properties.getProperty("server.port"));
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.out.println("IO error");
         }
         return -1;
     }

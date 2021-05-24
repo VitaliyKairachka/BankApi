@@ -4,8 +4,6 @@ import com.kairachka.bankapi.entity.Partner;
 import com.kairachka.bankapi.repository.PartnerRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +12,6 @@ import java.util.List;
 public class PartnerRepositoryImpl implements PartnerRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private String url = propertiesManager.getUrl();
-    private final Logger logger = LoggerFactory.getLogger(PartnerRepositoryImpl.class);
 
     @Override
     public void setUrl(String url) {
@@ -30,7 +27,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return false;
         }
     }
@@ -51,7 +48,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
             }
             return partnerList;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return null;
         }
     }

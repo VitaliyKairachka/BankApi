@@ -12,8 +12,6 @@ import com.kairachka.bankapi.service.Impl.UserServiceImpl;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,7 +22,6 @@ public class CardController implements HttpHandler {
     private UserServiceImpl userServiceImpl = new UserServiceImpl();
     private CardServiceImpl cardServiceImpl = new CardServiceImpl();
     private final CardMapper cardMapper = new CardMapper();
-    private final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     public CardController() {
     }
@@ -57,11 +54,11 @@ public class CardController implements HttpHandler {
                             }
                         }
                         catch (NoAccessException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("No access");
                             exchange.sendResponseHeaders(403, -1);
                         }
                         catch (BillNotFoundException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("Bill not found");
                             exchange.sendResponseHeaders(404, -1);
                         }
                     } else if (requestQuery.get("id") != null) {
@@ -74,10 +71,10 @@ public class CardController implements HttpHandler {
                             outputStream.flush();
                             outputStream.close();
                         } catch (CardNotFoundException | BillNotFoundException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("Card or bill not found");
                             exchange.sendResponseHeaders(404, -1);
                         } catch (NoAccessException e) {
-                            logger.info(e.getMessage());
+                            System.out.println("No access");
                             exchange.sendResponseHeaders(403, -1);
                         }
                     } else {
@@ -141,9 +138,9 @@ public class CardController implements HttpHandler {
             }
             exchange.close();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            System.out.println("IO error");
         } catch (UserNotFoundException e) {
-            logger.info(e.getMessage());
+            System.out.println("User not found");
         }
     }
 }

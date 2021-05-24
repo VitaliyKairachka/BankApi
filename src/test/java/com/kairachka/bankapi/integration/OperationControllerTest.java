@@ -46,11 +46,11 @@ public class OperationControllerTest {
     private final OperationServiceImpl operationService =
             new OperationServiceImpl(operationRepository, billService, userService);
     private static final String url = "jdbc:h2:mem:testIntegration;DB_CLOSE_DELAY=-1";
-    private static final String createTable = "src/test/resources/SQLScripts/CreateTestTables";
-    private static final String deleteTable = "src/test/resources/SQLScripts/DropTestTables";
-    private static final String createAdminUser = "src/test/resources/SQLScripts/CreateAdminUser";
-    private static final String createUser = "src/test/resources/SQLScripts/CreateUser";
-    private static final String createUser2 = "src/test/resources/SQLScripts/CreateUser2";
+    private static final String createTable = "src/test/resources/SQLScripts/CreateTestTables.sql";
+    private static final String deleteTable = "src/test/resources/SQLScripts/DropTestTables.sql";
+    private static final String createAdminUser = "src/test/resources/SQLScripts/CreateAdminUser.sql";
+    private static final String createUser = "src/test/resources/SQLScripts/CreateUser.sql";
+    private static final String createUser2 = "src/test/resources/SQLScripts/CreateUser2.sql";
     private static Connection connectionDB;
     private final OperationController operationController = new OperationController(operationService, userService);
     private final Authenticator authenticator = new Authenticator(userService);
@@ -103,7 +103,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", user);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", user);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", user);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -132,7 +132,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", userNotFound);
-        assertEquals(connection.getResponseCode(), 401);
+        assertEquals(401, connection.getResponseCode());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", user2);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", user);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -182,7 +182,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -191,7 +191,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -216,7 +216,7 @@ public class OperationControllerTest {
         out.writeBytes(jsonRequest);
         out.flush();
         out.close();
-        assertEquals(connection.getResponseCode(), 201);
+        assertEquals(201, connection.getResponseCode());
     }
 
     @Test
@@ -241,7 +241,7 @@ public class OperationControllerTest {
         out.writeBytes(jsonRequest);
         out.flush();
         out.close();
-        assertEquals(connection.getResponseCode(), 406);
+        assertEquals(406, connection.getResponseCode());
     }
     @Test
     void handlePost404() throws IOException, SQLException {
@@ -262,7 +262,7 @@ public class OperationControllerTest {
         out.writeBytes(jsonRequest);
         out.flush();
         out.close();
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -280,7 +280,7 @@ public class OperationControllerTest {
         out.writeBytes(jsonRequest);
         out.flush();
         out.close();
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -298,7 +298,7 @@ public class OperationControllerTest {
         out.writeBytes(jsonRequest);
         out.flush();
         out.close();
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -318,7 +318,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -338,7 +338,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 406);
+        assertEquals(406, connection.getResponseCode());
     }
 
     @Test
@@ -347,7 +347,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -356,7 +356,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("PUT");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -365,7 +365,7 @@ public class OperationControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("DELETE");
         connection.setRequestProperty("Authorization", admin);
-        assertEquals(connection.getResponseCode(), 405);
+        assertEquals(405, connection.getResponseCode());
     }
 
 }

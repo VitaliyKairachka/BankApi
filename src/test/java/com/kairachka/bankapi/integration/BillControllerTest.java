@@ -36,10 +36,10 @@ public class BillControllerTest {
     private final UserServiceImpl userService = new UserServiceImpl(userRepository);
     private final BillServiceImpl billService = new BillServiceImpl(billRepository, userService);
     private static final String url = "jdbc:h2:mem:testIntegration;DB_CLOSE_DELAY=-1";
-    private static final String createTable = "src/test/resources/SQLScripts/CreateTestTables";
-    private static final String deleteTable = "src/test/resources/SQLScripts/DropTestTables";
-    private static final String createAdminUser = "src/test/resources/SQLScripts/CreateAdminUser";
-    private static final String createUser = "src/test/resources/SQLScripts/CreateUser";
+    private static final String createTable = "src/test/resources/SQLScripts/CreateTestTables.sql";
+    private static final String deleteTable = "src/test/resources/SQLScripts/DropTestTables.sql";
+    private static final String createAdminUser = "src/test/resources/SQLScripts/CreateAdminUser.sql";
+    private static final String createUser = "src/test/resources/SQLScripts/CreateUser.sql";
     private static Connection connectionDB;
     private final BillController billController = new BillController(billService, userService);
     private final Authenticator authenticator = new Authenticator(userService);
@@ -74,7 +74,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class BillControllerTest {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
         connection.setDoOutput(true);
-        assertEquals(connection.getResponseCode(), 201);
+        assertEquals(201, connection.getResponseCode());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class BillControllerTest {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
         connection.setDoOutput(true);
-        assertEquals(connection.getResponseCode(), 406);
+        assertEquals(406, connection.getResponseCode());
     }
 
     @Test
@@ -187,7 +187,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Authorization", "Basic YWRtaW46YWRtaW4=");
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -196,7 +196,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -205,7 +205,7 @@ public class BillControllerTest {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("DELETE");
         connection.setRequestProperty("Authorization", "Basic dXNlcjphZG1pbg==");
-        assertEquals(connection.getResponseCode(), 405);
+        assertEquals(405, connection.getResponseCode());
     }
 
 }

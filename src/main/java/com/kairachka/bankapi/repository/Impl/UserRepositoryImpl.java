@@ -5,8 +5,6 @@ import com.kairachka.bankapi.enums.Role;
 import com.kairachka.bankapi.repository.UserRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.Optional;
@@ -14,7 +12,6 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private String url = propertiesManager.getUrl();
-    private final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
     @Override
     public void setUrl(String url) {
@@ -36,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return false;
         }
     }
@@ -60,7 +57,7 @@ public class UserRepositoryImpl implements UserRepository {
                     Role.valueOf(resultSet.getString(9)));
             return Optional.of(user);
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return Optional.empty();
         }
     }

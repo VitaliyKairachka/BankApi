@@ -9,15 +9,12 @@ import com.kairachka.bankapi.service.UserService;
 import com.kairachka.bankapi.util.QueryParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class UserController implements HttpHandler {
     private UserService userServiceImpl = new UserServiceImpl();
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserMapper userMapper = new UserMapper();
 
     public UserController() {
@@ -51,10 +48,10 @@ public class UserController implements HttpHandler {
                 exchange.sendResponseHeaders(405, -1);
             }
             exchange.close();
-        } catch (IOException | NullPointerException e) {
-            logger.error(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IO error");
         } catch (UserNotFoundException e) {
-            logger.info(e.getMessage());
+            System.out.println("User not found");
         }
     }
 }

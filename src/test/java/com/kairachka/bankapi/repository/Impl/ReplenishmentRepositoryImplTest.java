@@ -17,8 +17,8 @@ public class ReplenishmentRepositoryImplTest {
     private final ReplenishmentRepository replenishmentRepository = new ReplenishmentRepositoryImpl();
     private static final String url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private ResultSet resultSet;
-    private static final String createTable = "src/test/resources/SQLScripts/Replenishment/CreateTableReplenishment";
-    private static final String deleteTable = "src/test/resources/SQLScripts/Replenishment/DeleteTableReplenishment";
+    private static final String createTable = "src/test/resources/SQLScripts/Replenishment/CreateTableReplenishment.sql";
+    private static final String deleteTable = "src/test/resources/SQLScripts/Replenishment/DeleteTableReplenishment.sql";
 
     @Test
     public void addReplenishment() throws SQLException, FileNotFoundException {

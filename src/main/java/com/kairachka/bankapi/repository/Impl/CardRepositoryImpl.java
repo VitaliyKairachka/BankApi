@@ -4,8 +4,6 @@ import com.kairachka.bankapi.entity.Card;
 import com.kairachka.bankapi.repository.CardRepository;
 import com.kairachka.bankapi.util.PropertiesManager;
 import com.kairachka.bankapi.util.QuerySQL;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ public class CardRepositoryImpl implements CardRepository {
     private final PropertiesManager propertiesManager = new PropertiesManager();
     private String url = propertiesManager.getUrl();
     private ResultSet resultSet;
-    private final Logger logger = LoggerFactory.getLogger(CardRepositoryImpl.class);
 
     @Override
     public void setUrl(String url) {
@@ -34,7 +31,7 @@ public class CardRepositoryImpl implements CardRepository {
             preparedStatement.execute();
             return true;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return false;
         }
     }
@@ -60,7 +57,7 @@ public class CardRepositoryImpl implements CardRepository {
             }
             return cardList;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return null;
         }
     }
@@ -83,7 +80,7 @@ public class CardRepositoryImpl implements CardRepository {
             );
             return Optional.of(card);
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return Optional.empty();
         }
     }
@@ -108,7 +105,7 @@ public class CardRepositoryImpl implements CardRepository {
             }
             return cardList;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return null;
         }
     }
@@ -134,7 +131,7 @@ public class CardRepositoryImpl implements CardRepository {
             }
             return cardList;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return null;
         }
     }
@@ -147,7 +144,7 @@ public class CardRepositoryImpl implements CardRepository {
             preparedStatement.setLong(2, cardId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.info(e.getMessage());
+            System.out.println("SQL error");
             return false;
         }
     }

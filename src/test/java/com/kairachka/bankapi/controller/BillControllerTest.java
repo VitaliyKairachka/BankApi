@@ -64,7 +64,7 @@ class BillControllerTest {
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(userService.getUserIdByLogin(Mockito.anyString())).thenReturn((long) 1);
         Mockito.when(billService.getAllBillsByUser(Mockito.anyInt())).thenReturn(billList);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -90,7 +90,7 @@ class BillControllerTest {
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(billService.getBillByIdAndLogin(Mockito.anyLong(),
                 Mockito.anyString())).thenThrow(NoAccessException.class);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -103,7 +103,7 @@ class BillControllerTest {
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(billService.getBillByIdAndLogin(Mockito.anyLong(),
                 Mockito.anyString())).thenThrow(BillNotFoundException.class);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -115,7 +115,7 @@ class BillControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(billService.getBalance(Mockito.anyLong(), Mockito.anyString())).thenReturn((double) 0);
-        assertEquals(connection.getResponseCode(), 200);
+        assertEquals(200, connection.getResponseCode());
     }
 
     @Test
@@ -129,7 +129,7 @@ class BillControllerTest {
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(billService.getBalance(Mockito.anyLong(),
                 Mockito.anyString())).thenThrow(BillNotFoundException.class);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -142,7 +142,7 @@ class BillControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
         Mockito.when(billService.getBalance(Mockito.anyLong(), Mockito.anyString())).thenThrow(NoAccessException.class);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -153,7 +153,7 @@ class BillControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -164,7 +164,7 @@ class BillControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -185,7 +185,7 @@ class BillControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
         Mockito.when(billService.addBill(Mockito.anyLong())).thenReturn(true);
-        assertEquals(connection.getResponseCode(), 201);
+        assertEquals(201, connection.getResponseCode());
     }
 
     @Test
@@ -206,7 +206,7 @@ class BillControllerTest {
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
         Mockito.when(billService.addBill(Mockito.anyLong())).thenReturn(false);
-        assertEquals(connection.getResponseCode(), 406);
+        assertEquals(406, connection.getResponseCode());
     }
 
     @Test
@@ -217,7 +217,7 @@ class BillControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.EMPLOYEE);
-        assertEquals(connection.getResponseCode(), 404);
+        assertEquals(404, connection.getResponseCode());
     }
 
     @Test
@@ -228,7 +228,7 @@ class BillControllerTest {
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
         Mockito.when(userService.getRoleByLogin(Mockito.anyString())).thenReturn(Role.USER);
-        assertEquals(connection.getResponseCode(), 403);
+        assertEquals(403, connection.getResponseCode());
     }
 
     @Test
@@ -238,6 +238,6 @@ class BillControllerTest {
         connection.setRequestMethod("DELETE");
         connection.setRequestProperty("Authorization", "Basic MTIzOjEyMw==");
         Mockito.when(userService.authentication(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
-        assertEquals(connection.getResponseCode(), 405);
+        assertEquals(405, connection.getResponseCode());
     }
 }

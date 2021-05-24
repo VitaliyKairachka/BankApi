@@ -18,8 +18,8 @@ public class OperationRepositoryImplTest {
     private final OperationRepository operationRepository = new OperationRepositoryImpl();
     private ResultSet resultSet;
     private static final String url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
-    private static final String createTable = "src/test/resources/SQLScripts/Operation/CreateTableOperation";
-    private static final String deleteTable = "src/test/resources/SQLScripts/Operation/DeleteTableOperation";
+    private static final String createTable = "src/test/resources/SQLScripts/Operation/CreateTableOperation.sql";
+    private static final String deleteTable = "src/test/resources/SQLScripts/Operation/DeleteTableOperation.sql";
 
     @Test
     public void addOperation() throws SQLException, FileNotFoundException {
