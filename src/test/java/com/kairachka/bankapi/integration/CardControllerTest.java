@@ -1,7 +1,6 @@
 package com.kairachka.bankapi.integration;
 
 import com.kairachka.bankapi.controller.CardController;
-import com.kairachka.bankapi.exception.UserNotFoundException;
 import com.kairachka.bankapi.repository.BillRepository;
 import com.kairachka.bankapi.repository.CardRepository;
 import com.kairachka.bankapi.repository.Impl.BillRepositoryImpl;
@@ -52,7 +51,6 @@ public class CardControllerTest {
     private final Authenticator authenticator = new Authenticator(userService);
     private static final String admin = "Basic YWRtaW46YWRtaW4=";
     private static final String user = "Basic dXNlcjphZG1pbg==";
-    private static final String user2 = "Basic cXdlOmFkbWlu";
 
     @BeforeEach
     void setUp() throws IOException, SQLException {
