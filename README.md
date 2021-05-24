@@ -6,6 +6,8 @@
 - настройки порта и url подключения к бд нахоядтся в "src/main/resources/property/property"
 ***
 ## Stack
+- ### JBDC
+- ### HttpServer
 - ### jackson
 - ### h2database
 - ### jbcrypt
